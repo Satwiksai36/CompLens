@@ -149,15 +149,14 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
               <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-muted">Company / Role</th>
               <th className="py-4 px-4 text-[10px] font-bold uppercase tracking-widest text-muted">Level (Equivalent)</th>
               <th className="py-4 px-4 text-[10px] font-bold uppercase tracking-widest text-muted">Location</th>
-              <th className="py-4 px-4 text-[10px] font-bold uppercase tracking-widest text-muted text-right">Base Salary</th>
-              <th className="py-4 px-4 text-[10px] font-bold uppercase tracking-widest text-muted text-right">Total Comp</th>
+              <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-muted text-right">Total Compensation</th>
               <th className="py-4 px-6 w-12 text-center text-muted"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border/60">
             {datapoints.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-sm text-muted font-medium italic">
+                <td colSpan={5} className="py-12 text-center text-sm text-muted font-medium italic">
                   No verified compensation records match your search criteria.
                 </td>
               </tr>
@@ -200,7 +199,9 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs font-semibold text-muted mt-0.5">{dp.roleName}</div>
+                            <div className="text-xs font-semibold text-muted mt-0.5">
+                              {dp.roleName} • <span className="text-slate-500 dark:text-zinc-400">{dp.yearsExperience} yrs exp</span>
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -215,15 +216,13 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                         <div className="text-xs text-muted font-medium mt-0.5">{dp.locationCountry}</div>
                       </td>
 
-                      <td className="py-4.5 px-4 text-right text-sm">
-                        <CurrencyDisplay value={dp.baseSalary} currency={dp.currency} />
-                      </td>
-
-                      <td className="py-4.5 px-4 text-right">
-                        <div className="text-emerald-600 dark:text-emerald-400 text-sm md:text-base">
-                          <CurrencyDisplay value={dp.totalCompensation} currency={dp.currency} className="text-emerald-600 dark:text-emerald-400" />
+                      <td className="py-4.5 px-6 text-right">
+                        <div className="text-emerald-600 dark:text-emerald-400 text-sm md:text-base font-black font-display">
+                          <CurrencyDisplay value={dp.totalCompensation} currency={dp.currency} className="text-emerald-600 dark:text-emerald-400 font-black" />
                         </div>
-                        <div className="text-[9px] text-muted font-bold font-mono tracking-wider uppercase mt-0.5">/ yr</div>
+                        <div className="text-[10px] text-muted font-semibold mt-0.5">
+                          {formatMoney(dp.baseSalary, dp.currency)} base | {formatMoney(annualStock, dp.currency)} stock | {formatMoney(annualBonus, dp.currency)} bonus
+                        </div>
                       </td>
 
                       <td className="py-4.5 px-6 text-center">
@@ -259,7 +258,7 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
 
                       return (
                         <tr className="bg-muted/10">
-                          <td colSpan={6} className="border-t border-border px-6 py-5">
+                          <td colSpan={5} className="border-t border-border px-6 py-5">
                             <div className="flex flex-col gap-5 max-w-4xl">
                               
                               {/* Horizontal Breakdown and values */}

@@ -153,17 +153,16 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
     <div ref={containerRef} className="w-full max-w-5xl mx-auto mb-10 px-4">
       {/* Title Header */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight font-display">
-          <span className="text-gradient">Understand Compensation </span>
-          <span className="text-gradient-primary">Beyond Job Titles</span>
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight font-display text-slate-900 dark:text-white">
+          Search <span className="text-indigo-600 dark:text-indigo-400">Salaries</span> & <span className="text-indigo-600 dark:text-indigo-400">Job Levels</span>
         </h1>
         <p className="text-muted text-sm md:text-lg max-w-2xl mx-auto font-medium opacity-90 leading-relaxed">
-          Compare salaries using equivalent levels, locations, and structured compensation breakdowns.
+          Get paid what you're worth. Explore & compare tech salaries, levels, benefits, & more.
         </p>
       </div>
 
       {/* Prominent Search Bar */}
-      <div className="relative flex flex-col md:flex-row items-stretch bg-card border border-border rounded-2xl p-2 shadow-2xl gap-2 focus-within:border-primary/50 focus-within:shadow-[0_0_30px_rgba(99,102,241,0.12)] transition-all duration-300">
+      <div className="relative flex flex-col md:flex-row items-stretch bg-white dark:bg-card border border-border rounded-2xl p-2 shadow-xl gap-2 focus-within:border-primary/50 focus-within:shadow-[0_0_30px_rgba(99,102,241,0.12)] transition-all duration-300">
         
         {/* Search input field */}
         <div className="flex-1 relative flex items-center px-4 gap-3">
@@ -171,7 +170,7 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
           <input
             type="text"
             className="w-full bg-transparent text-foreground outline-none text-base placeholder-muted/60 py-3.5 font-medium"
-            placeholder="Search company, job title, level..."
+            placeholder="Search salaries, companies, or titles (e.g. Software Engineer, Google)..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
@@ -214,18 +213,33 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
         </div>
       </div>
 
-      {/* Popular Companies Quick-Links */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mt-5 text-xs text-muted">
-        <span className="font-bold tracking-wider uppercase text-[10px] mr-1">Popular:</span>
-        {["Google", "Meta", "Amazon", "Microsoft", "Apple", "Netflix", "Uber", "Airbnb"].map((compName) => (
-          <button
-            key={compName}
-            onClick={() => handlePopularCompanyClick(compName)}
-            className="px-3.5 py-1 rounded-full bg-card hover:bg-card-hover border border-border hover:border-primary/40 text-foreground/80 hover:text-foreground text-[11px] font-semibold cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-sm"
-          >
-            {compName}
-          </button>
-        ))}
+      {/* Popular Roles & Companies Quick-Links */}
+      <div className="mt-6 space-y-3 flex flex-col items-center">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted">
+          <span className="font-bold tracking-wider uppercase text-[10px] mr-1 text-slate-400 dark:text-zinc-500">Popular Roles:</span>
+          {["Software Engineer", "Product Manager", "Data Scientist", "ML Engineer", "Designer"].map((roleName) => (
+            <button
+              key={roleName}
+              onClick={() => handlePopularCompanyClick(roleName)}
+              className="px-3 py-1 rounded-full bg-card hover:bg-card-hover border border-border hover:border-primary/40 text-foreground/80 hover:text-foreground text-[11px] font-semibold cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-xs"
+            >
+              {roleName}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted">
+          <span className="font-bold tracking-wider uppercase text-[10px] mr-1 text-slate-400 dark:text-zinc-500">Popular Brands:</span>
+          {["Google", "Meta", "Amazon", "Microsoft", "Apple", "Netflix", "Uber", "Airbnb"].map((compName) => (
+            <button
+              key={compName}
+              onClick={() => handlePopularCompanyClick(compName)}
+              className="px-3 py-1 rounded-full bg-card hover:bg-card-hover border border-border hover:border-primary/40 text-foreground/80 hover:text-foreground text-[11px] font-semibold cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-xs"
+            >
+              {compName}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Pill-shaped Dropdown Filters row */}

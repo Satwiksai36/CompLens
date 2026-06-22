@@ -255,63 +255,14 @@ export default function DashboardClient({
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* 1. Dashboard summary cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        {/* Companies card */}
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Total Companies</span>
-            <Landmark className="w-5 h-5 text-primary" />
-          </div>
-          <div className="text-2xl font-black text-foreground">{totalCompanies}</div>
-          <div className="text-[10px] text-muted font-medium mt-1">Seeded corporate tech networks</div>
-        </div>
-
-        {/* Roles card */}
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Active Roles</span>
-            <Briefcase className="w-5 h-5 text-accent" />
-          </div>
-          <div className="text-2xl font-black text-foreground">{totalRoles}</div>
-          <div className="text-[10px] text-muted font-medium mt-1">Spans SE, PM, Data Science and Design</div>
-        </div>
-
-        {/* Average comp card */}
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Global Median Pay</span>
-            <DollarSign className="w-5 h-5 text-emerald-500" />
-          </div>
-          <div className="text-2xl font-black text-foreground">
-            <CurrencyDisplay value={averageComp} currency="USD" className="text-2xl" />
-          </div>
-          <div className="text-[10px] text-muted font-medium mt-1">USD equivalent normalized annually</div>
-        </div>
-
-        {/* Highest paying company card */}
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Top Paying Employer</span>
-            <MapPin className="w-5 h-5 text-amber-500" />
-          </div>
-          <div className="text-lg font-black text-foreground truncate">{highestPayingCompany}</div>
-          <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-            <CurrencyDisplay value={highestPayingMedian} currency="USD" className="text-xs font-bold text-emerald-600 dark:text-emerald-400" />
-          </div>
-        </div>
-
-      </div>
-
       {/* Hero explore buttons */}
       <div className="flex justify-center mt-2 mb-4">
-        <div className="tab-navigator shadow-xl">
+        <div className="tab-navigator shadow-md bg-white dark:bg-card border border-border p-1 rounded-full flex gap-1">
           <button
             onClick={() => setActiveTab("explore")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
               activeTab === "explore"
-                ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
+                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
                 : "text-muted hover:text-foreground hover:bg-card-hover/40"
             }`}
           >
@@ -321,7 +272,7 @@ export default function DashboardClient({
             onClick={() => setActiveTab("levels")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
               activeTab === "levels"
-                ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
+                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
                 : "text-muted hover:text-foreground hover:bg-card-hover/40"
             }`}
           >
@@ -331,7 +282,7 @@ export default function DashboardClient({
             onClick={() => setActiveTab("compare")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
               activeTab === "compare"
-                ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
+                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
                 : "text-muted hover:text-foreground hover:bg-card-hover/40"
             }`}
           >
@@ -341,7 +292,7 @@ export default function DashboardClient({
             onClick={() => setActiveTab("location")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
               activeTab === "location"
-                ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
+                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
                 : "text-muted hover:text-foreground hover:bg-card-hover/40"
             }`}
           >
@@ -351,13 +302,63 @@ export default function DashboardClient({
             onClick={() => setActiveTab("submit")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
               activeTab === "submit"
-                ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
+                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
                 : "text-muted hover:text-foreground hover:bg-card-hover/40"
             }`}
           >
             Submit Salary
           </button>
         </div>
+      </div>
+
+      {/* 1. Dashboard summary cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        {/* Companies card */}
+        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between text-muted mb-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Total Companies</span>
+            <Landmark className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+          </div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white font-display">{totalCompanies}</div>
+          <div className="text-[10px] text-muted font-medium mt-1">Seeded corporate tech networks</div>
+        </div>
+
+        {/* Roles card */}
+        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between text-muted mb-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Active Roles</span>
+            <Briefcase className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
+          </div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white font-display">{totalRoles}</div>
+          <div className="text-[10px] text-muted font-medium mt-1">Spans SE, PM, Data Science and Design</div>
+        </div>
+
+        {/* Average comp card */}
+        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between text-muted mb-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Global Median Pay</span>
+            <DollarSign className="w-5 h-5 text-emerald-500" />
+          </div>
+          <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-display">
+            <CurrencyDisplay value={averageComp} currency="USD" className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-display" />
+          </div>
+          <div className="text-[10px] text-muted font-medium mt-1">USD equivalent normalized annually</div>
+        </div>
+
+        {/* Highest paying company card */}
+        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between text-muted mb-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Top Paying Employer</span>
+            <MapPin className="w-5 h-5 text-amber-500" />
+          </div>
+          <div className="text-xl font-black text-slate-900 dark:text-white font-display truncate">{highestPayingCompany}</div>
+          <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+            <CurrencyDisplay value={highestPayingMedian} currency="USD" className="text-xs font-bold text-emerald-600 dark:text-emerald-400" />
+            <span className="text-[9px] text-muted font-normal ml-1">median TC</span>
+          </div>
+        </div>
+
       </div>
 
       {/* 2. Main Tab Views */}
@@ -373,7 +374,7 @@ export default function DashboardClient({
                 onFilterChange={(next) => setFilters(next)}
               />
               <div className="flex justify-between items-center px-2">
-                <span className="text-xs font-bold text-muted uppercase tracking-wider">
+                <span className="text-[10px] font-extrabold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
                   Verified Salaries ({tableData.length} records matching)
                 </span>
               </div>
@@ -383,9 +384,9 @@ export default function DashboardClient({
             {/* Right Sidebar Section (30%) */}
             <div className="lg:col-span-3 space-y-6">
               {/* Top Paying Companies */}
-              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
-                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
-                  <span className="text-amber-500 text-base">★</span>
+              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-4 flex items-center gap-2 border-b border-border pb-2.5">
+                  <span className="text-amber-500 text-base leading-none">★</span>
                   Top Paying Companies
                 </h3>
                 <div className="space-y-3">
@@ -397,7 +398,7 @@ export default function DashboardClient({
                       <div className="flex items-center gap-3">
                         <CompanyLogo name={item.name} size={32} className="shrink-0" />
                         <div>
-                          <p className="text-xs font-bold text-foreground">{item.name}</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white">{item.name}</p>
                           <p className="text-[10px] text-muted">Median Annual Pay</p>
                         </div>
                       </div>
@@ -405,7 +406,7 @@ export default function DashboardClient({
                         <CurrencyDisplay 
                           value={item.median} 
                           currency="USD" 
-                          className="text-xs font-black text-emerald-500 dark:text-emerald-400" 
+                          className="text-xs font-black text-emerald-600 dark:text-emerald-400" 
                         />
                         <p className="text-[9px] text-muted">USD Eq.</p>
                       </div>
@@ -415,9 +416,9 @@ export default function DashboardClient({
               </div>
 
               {/* Top Paying Roles */}
-              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
-                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
-                  <Briefcase className="w-3.5 h-3.5 text-primary" />
+              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-4 flex items-center gap-2 border-b border-border pb-2.5">
+                  <Briefcase className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                   Top Paying Roles
                 </h3>
                 <div className="space-y-3">
@@ -427,11 +428,11 @@ export default function DashboardClient({
                       className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
                           <Briefcase className="w-3.5 h-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-foreground truncate max-w-[130px]">{item.name}</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[130px]">{item.name}</p>
                           <p className="text-[10px] text-muted">Role Category</p>
                         </div>
                       </div>
@@ -439,7 +440,7 @@ export default function DashboardClient({
                         <CurrencyDisplay 
                           value={item.median} 
                           currency="USD" 
-                          className="text-xs font-black text-emerald-500 dark:text-emerald-400" 
+                          className="text-xs font-black text-emerald-600 dark:text-emerald-400" 
                         />
                         <p className="text-[9px] text-muted">USD Eq.</p>
                       </div>
@@ -449,9 +450,9 @@ export default function DashboardClient({
               </div>
 
               {/* Progression Equivalent Matrix */}
-              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
-                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-3 flex items-center gap-2">
-                  <Landmark className="w-3.5 h-3.5 text-cyan-500" />
+              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
+                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3 flex items-center gap-2 border-b border-border pb-2.5">
+                  <Landmark className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                   Grade Matrix
                 </h3>
                 <p className="text-[10px] text-muted mb-4 leading-relaxed">
@@ -460,43 +461,43 @@ export default function DashboardClient({
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-[10px]">
                     <thead>
-                      <tr className="border-b border-border/80 text-muted uppercase font-bold tracking-wider">
-                        <th className="py-1.5 pb-2 font-bold">Equiv</th>
-                        <th className="py-1.5 pb-2 font-bold">Google</th>
-                        <th className="py-1.5 pb-2 font-bold">Meta</th>
-                        <th className="py-1.5 pb-2 font-bold">MSFT</th>
+                      <tr className="border-b border-border text-muted uppercase font-bold tracking-wider">
+                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Equiv</th>
+                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Google</th>
+                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Meta</th>
+                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">MSFT</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border/40 font-semibold text-foreground">
+                    <tbody className="divide-y divide-border/40 font-semibold text-slate-700 dark:text-zinc-300">
                       <tr className="hover:bg-card-hover/20">
-                        <td className="py-2 text-muted">Entry</td>
-                        <td className="py-2 text-indigo-400">L3</td>
-                        <td className="py-2 text-emerald-400">E3</td>
-                        <td className="py-2 text-amber-400">59</td>
+                        <td className="py-2.5 text-muted">Entry</td>
+                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L3</td>
+                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E3</td>
+                        <td className="py-2.5 text-amber-600 dark:text-amber-400">59</td>
                       </tr>
                       <tr className="hover:bg-card-hover/20">
-                        <td className="py-2 text-muted">Mid</td>
-                        <td className="py-2 text-indigo-400">L4</td>
-                        <td className="py-2 text-emerald-400">E4</td>
-                        <td className="py-2 text-amber-400">61</td>
+                        <td className="py-2.5 text-muted">Mid</td>
+                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L4</td>
+                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E4</td>
+                        <td className="py-2.5 text-amber-600 dark:text-amber-400">61</td>
                       </tr>
                       <tr className="hover:bg-card-hover/20">
-                        <td className="py-2 text-muted">Senior</td>
-                        <td className="py-2 text-indigo-400">L5</td>
-                        <td className="py-2 text-emerald-400">E5</td>
-                        <td className="py-2 text-amber-400">63</td>
+                        <td className="py-2.5 text-muted">Senior</td>
+                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L5</td>
+                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E5</td>
+                        <td className="py-2.5 text-amber-600 dark:text-amber-400">63</td>
                       </tr>
                       <tr className="hover:bg-card-hover/20">
-                        <td className="py-2 text-muted">Staff</td>
-                        <td className="py-2 text-indigo-400">L6</td>
-                        <td className="py-2 text-emerald-400">E6</td>
-                        <td className="py-2 text-amber-400">65</td>
+                        <td className="py-2.5 text-muted">Staff</td>
+                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L6</td>
+                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E6</td>
+                        <td className="py-2.5 text-amber-600 dark:text-amber-400">65</td>
                       </tr>
                       <tr className="hover:bg-card-hover/20">
-                        <td className="py-2 text-muted">Principal</td>
-                        <td className="py-2 text-indigo-400">L7</td>
-                        <td className="py-2 text-emerald-400">E7</td>
-                        <td className="py-2 text-amber-400">67</td>
+                        <td className="py-2.5 text-muted">Principal</td>
+                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L7</td>
+                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E7</td>
+                        <td className="py-2.5 text-amber-600 dark:text-amber-400">67</td>
                       </tr>
                     </tbody>
                   </table>
