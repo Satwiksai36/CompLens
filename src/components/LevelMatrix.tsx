@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Company, Level } from "@prisma/client";
+import { Company, Level } from "@/types";
 
 export interface LevelMatrixProps {
   companies: Array<Company & { levels: Level[] }>;

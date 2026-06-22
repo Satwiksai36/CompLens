@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Company, Level, Role, Location } from "@prisma/client";
+import { Company, Level, Role, Location } from "@/types";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts";
 import { CompensationTable } from "@/components/CompensationTable";
 import { CompanyLogo } from "@/components/CompanyLogo";

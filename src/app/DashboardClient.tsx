@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { Company, Role, Location, Level, CompensationRecord } from "@prisma/client";
+import { Company, Role, Location, Level, CompensationRecord } from "@/types";
 import { FilterHero, FilterState } from "@/components/FilterHero";
 import { CompensationTable } from "@/components/CompensationTable";
 import { LevelMatrix } from "@/components/LevelMatrix";

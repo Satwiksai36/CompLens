@@ -1,4 +1,80 @@
+// ─── Prisma Model Types ──────────────────────────────────────────────────────
+// Defined locally to avoid IDE resolution issues with @prisma/client re-exports.
+// These mirror the schema.prisma model shapes exactly.
+
+export interface Company {
+  id: string;
+  name: string;
+  logo: string | null;
+  industry: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Role {
+  id: string;
+  roleName: string;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Level {
+  id: string;
+  companyId: string;
+  levelCode: string;
+  equivalentLevel: string;
+  description: string | null;
+  confidenceScore: number;
+  mappingType: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Location {
+  id: string;
+  city: string;
+  country: string;
+  region: string | null;
+  costOfLivingIndex: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CompensationRecord {
+  id: string;
+  companyId: string;
+  roleId: string;
+  levelId: string;
+  locationId: string;
+  yearsExperience: number;
+  baseSalary: number;
+  stockGrant: number;
+  bonus: number;
+  joiningBonus: number;
+  totalCompensation: number;
+  currency: string;
+  submittedAt: Date;
+  verificationStatus: string;
+  userId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string | null;
+  passwordHash: string;
+  role: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// ─── Application Types ────────────────────────────────────────────────────────
+
 export interface HeuristicResult {
+
   normalizedLevel: string; // Entry, Mid, Senior, Staff, Principal, Director+
   confidenceScore: number;
   mappingType: 'estimated';

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Location, CompensationRecord } from "@prisma/client";
+import { Location, CompensationRecord } from "@/types";
 import { MapPin, Info, ArrowUpRight, TrendingUp } from "lucide-react";
 import { CurrencyDisplay } from "./CurrencyDisplay";
 

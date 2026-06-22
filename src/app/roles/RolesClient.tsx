@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Role, Company, Level, Location } from "@prisma/client";
+import { Role, Company, Level, Location } from "@/types";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts";
 import { Briefcase, Landmark, Compass, Award, ChevronRight } from "lucide-react";
 import Link from "next/link";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Company, Role, Location } from "@prisma/client";
+import { Company, Role, Location } from "@/types";
 import { getComparison } from "../actions/compensation.actions";
 import { CompanyCompSummary, DatapointDetail } from "../types";
 import { Scale, ArrowRight, ArrowUpRight, TrendingDown, HelpCircle } from "lucide-react";
