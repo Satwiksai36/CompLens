@@ -79,7 +79,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
       <div className="relative w-full max-w-[420px] bg-white dark:bg-[#121214] rounded-2xl shadow-2xl animate-fadeIn z-10 border border-slate-200 dark:border-[#222226] overflow-hidden">
         
         {/* Top accent bar */}
-        <div className="h-1 w-full bg-gradient-to-r from-primary via-purple-500 to-cyan-500" />
+        <div className="h-1 w-full bg-linear-to-r from-primary via-purple-500 to-cyan-500" />
 
         <div className="p-7">
           {/* Close Button */}
@@ -95,7 +95,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           <div className="text-center mb-7">
             {/* Branding — matches Header logo */}
           <div className="flex items-center justify-center gap-2.5">
-            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-[#0060b9] to-[#19a672] shadow-md shadow-primary/20 shrink-0">
+            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br from-[#0060b9] to-[#19a672] shadow-md shadow-primary/20 shrink-0">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
                 <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
