@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import process from 'node:process';
 import path from 'path';
+import { hashPassword } from '../src/lib/crypto';
 
 const dbPath = `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`;
 const adapter = new PrismaBetterSqlite3({ url: dbPath });
@@ -182,10 +183,20 @@ async function main() {
 
   // 5. Seed Users
   const adminUser = await prisma.user.create({
-    data: { email: 'admin@complens.com', role: 'ADMIN' },
+    data: {
+      email: 'admin@complens.com',
+      name: 'Admin User',
+      passwordHash: hashPassword('admin123'),
+      role: 'ADMIN',
+    },
   });
   const normalUser = await prisma.user.create({
-    data: { email: 'user@complens.com', role: 'USER' },
+    data: {
+      email: 'user@complens.com',
+      name: 'Normal User',
+      passwordHash: hashPassword('user123'),
+      role: 'USER',
+    },
   });
   console.log('Seeded Users.');
 

@@ -3,17 +3,47 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sun, Moon, Database } from "lucide-react";
+import { Sun, Moon, Database, LogIn, LogOut, ChevronDown } from "lucide-react";
+import { getCurrentUserAction, signOutAction } from "../actions/auth.actions";
+import AuthModal from "./AuthModal";
 
 export default function Header() {
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
+  const [user, setUser] = useState<{ id: string; email: string; name: string | null; role: string } | null>(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const currentUser = await getCurrentUserAction();
+      setUser(currentUser);
+    }
+    fetchUser();
+  }, []);
+
+  const handleSignOut = async () => {
+    const res = await signOutAction();
+    if (res.success) {
+      setUser(null);
+      setShowDropdown(false);
+      window.location.reload();
+    }
+  };
+
+  const getInitials = () => {
+    if (!user) return "";
+    if (user.name) {
+      return user.name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
+    }
+    return user.email.substring(0, 2).toUpperCase();
+  };
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
+
     if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
@@ -45,7 +75,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-card/80 backdrop-blur-lg transition-colors duration-300">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-white/90 dark:bg-card/80 backdrop-blur-lg transition-colors duration-300 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <div className="flex items-center gap-8">
@@ -80,18 +110,6 @@ export default function Header() {
 
         {/* Right side controls */}
         <div className="flex items-center gap-4">
-          <Link
-            href="/admin"
-            className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-lg border transition-all duration-300 ${
-              pathname === "/admin"
-                ? "bg-primary/10 border-primary text-primary shadow-[0_0_15px_rgba(99,102,241,0.15)]"
-                : "border-border text-muted hover:text-foreground hover:bg-card-hover hover:border-primary/30"
-            }`}
-          >
-            <Database className="w-3.5 h-3.5" />
-            Admin
-          </Link>
-
           {/* Theme Toggler */}
           <button
             onClick={toggleTheme}
@@ -100,8 +118,70 @@ export default function Header() {
           >
             {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
           </button>
+
+          {/* User Section */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center gap-2 p-1.5 pl-2.5 pr-2 rounded-full border border-border hover:border-primary/30 hover:bg-card-hover cursor-pointer transition-all duration-200"
+              >
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-xs font-black">
+                  {getInitials()}
+                </div>
+                <ChevronDown className="w-3.5 h-3.5 text-muted" />
+              </button>
+
+              {showDropdown && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setShowDropdown(false)} 
+                  />
+                  <div className="absolute right-0 mt-2.5 w-56 glass-card rounded-xl border border-border p-2 shadow-2xl z-50 animate-fadeIn">
+                    <div className="px-3 py-2 border-b border-border/60">
+                      <p className="text-[10px] text-muted font-semibold uppercase tracking-wider">Signed in as</p>
+                      <p className="text-xs font-bold text-foreground truncate mt-0.5">{user.name || user.email}</p>
+                      <p className="text-[9px] text-muted truncate">{user.email}</p>
+                    </div>
+
+                    <div className="py-1.5 space-y-0.5">
+                      {user.role === "ADMIN" && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setShowDropdown(false)}
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-muted hover:text-foreground rounded-lg hover:bg-card-hover transition-colors"
+                        >
+                          <Database className="w-3.5 h-3.5 text-primary" />
+                          Admin Console
+                        </Link>
+                      )}
+                      
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-500 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors text-left cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsAuthOpen(true)}
+              className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Sign In
+            </button>
+          )}
         </div>
       </div>
+
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </header>
   );
 }

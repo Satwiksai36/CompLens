@@ -88,6 +88,8 @@ model CompensationRecord {
 model User {
   id                  String               @id @default(uuid())
   email               String               @unique
+  name                String?
+  passwordHash        String
   role                String               @default("USER") // USER | ADMIN
   compensationRecords CompensationRecord[]
   createdAt           DateTime             @default(now())

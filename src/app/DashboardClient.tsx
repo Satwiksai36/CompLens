@@ -8,8 +8,9 @@ import { LevelMatrix } from "@/components/LevelMatrix";
 import { ComparisonWorkspace } from "@/components/ComparisonWorkspace";
 import { LocationMatrix } from "@/components/LocationMatrix";
 import { submitCompensation } from "@/actions/compensation.actions";
-import { DollarSign, Landmark, Briefcase, MapPin, Send, AlertCircle, CheckCircle2 } from "lucide-react";
+import { DollarSign, Landmark, Briefcase, MapPin, Send, AlertCircle, CheckCircle2, Lock, ArrowRight } from "lucide-react";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
+import AuthModal from "@/components/AuthModal";
 
 export interface DashboardClientProps {
   initialCompanies: Array<Company & { levels: Level[] }>;
@@ -17,6 +18,7 @@ export interface DashboardClientProps {
   initialLocations: Location[];
   initialRecords: Array<CompensationRecord & { company: Company; role: Role; level: Level; location: Location }>;
   initialLevels: Level[];
+  currentUser: { id: string; email: string; name: string | null; role: string } | null;
 }
 
 export default function DashboardClient({
@@ -25,9 +27,11 @@ export default function DashboardClient({
   initialLocations,
   initialRecords,
   initialLevels,
+  currentUser,
 }: DashboardClientProps) {
   // Navigation Tabs: explore | levels | compare | location | submit
   const [activeTab, setActiveTab] = useState<"explore" | "levels" | "compare" | "location" | "submit">("explore");
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   // Filter States (Explore Tab)
   const [filters, setFilters] = useState<FilterState>({
@@ -97,6 +101,28 @@ export default function DashboardClient({
       highestPayingCompany = compName;
     }
   });
+
+  // Top 5 paying companies calculation
+  const companyMedianPay = Object.entries(companyPayMap).map(([name, comps]) => {
+    comps.sort((a, b) => a - b);
+    const mid = Math.floor(comps.length / 2);
+    const median = comps.length % 2 !== 0 ? comps[mid] : (comps[mid - 1] + comps[mid]) / 2;
+    const compRecord = initialCompanies.find(c => c.name === name);
+    return { name, median, logo: compRecord?.logo || 'logo-default' };
+  }).sort((a, b) => b.median - a.median).slice(0, 5);
+
+  // Top 5 paying roles calculation
+  const rolePayMap: Record<string, number[]> = {};
+  verifiedRecords.forEach((r) => {
+    if (!rolePayMap[r.role.roleName]) rolePayMap[r.role.roleName] = [];
+    rolePayMap[r.role.roleName].push(getUSDValue(r.totalCompensation, r.currency));
+  });
+  const roleMedianPay = Object.entries(rolePayMap).map(([name, comps]) => {
+    comps.sort((a, b) => a - b);
+    const mid = Math.floor(comps.length / 2);
+    const median = comps.length % 2 !== 0 ? comps[mid] : (comps[mid - 1] + comps[mid]) / 2;
+    return { name, median };
+  }).sort((a, b) => b.median - a.median).slice(0, 5);
 
   // 2. Filter Compensation Records Dynamically
   const filteredRecords = verifiedRecords.filter((rec) => {
@@ -336,19 +362,148 @@ export default function DashboardClient({
       {/* 2. Main Tab Views */}
       <div className="w-full">
         {activeTab === "explore" && (
-          <div className="space-y-6">
-            <FilterHero
-              locations={initialLocations}
-              companies={initialCompanies}
-              roles={initialRoles}
-              onFilterChange={(next) => setFilters(next)}
-            />
-            <div className="flex justify-between items-center px-2">
-              <span className="text-xs font-bold text-muted uppercase tracking-wider">
-                Verified Submissions ({tableData.length} records matching)
-              </span>
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+            {/* Left Column (70%) */}
+            <div className="lg:col-span-7 space-y-6 animate-fadeIn">
+              <FilterHero
+                locations={initialLocations}
+                companies={initialCompanies}
+                roles={initialRoles}
+                onFilterChange={(next) => setFilters(next)}
+              />
+              <div className="flex justify-between items-center px-2">
+                <span className="text-xs font-bold text-muted uppercase tracking-wider">
+                  Verified Salaries ({tableData.length} records matching)
+                </span>
+              </div>
+              <CompensationTable datapoints={tableData} />
             </div>
-            <CompensationTable datapoints={tableData} />
+
+            {/* Right Sidebar Section (30%) */}
+            <div className="lg:col-span-3 space-y-6">
+              {/* Top Paying Companies */}
+              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
+                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
+                  <span className="text-amber-500 text-base">★</span>
+                  Top Paying Companies
+                </h3>
+                <div className="space-y-3">
+                  {companyMedianPay.map((item) => (
+                    <div 
+                      key={item.name} 
+                      className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-xs text-white shrink-0 ${item.logo}`}>
+                          {item.name[0]}
+                        </span>
+                        <div>
+                          <p className="text-xs font-bold text-foreground">{item.name}</p>
+                          <p className="text-[10px] text-muted">Median Annual Pay</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <CurrencyDisplay 
+                          value={item.median} 
+                          currency="USD" 
+                          className="text-xs font-black text-emerald-500 dark:text-emerald-400" 
+                        />
+                        <p className="text-[9px] text-muted">USD Eq.</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top Paying Roles */}
+              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
+                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
+                  <Briefcase className="w-3.5 h-3.5 text-primary" />
+                  Top Paying Roles
+                </h3>
+                <div className="space-y-3">
+                  {roleMedianPay.map((item) => (
+                    <div 
+                      key={item.name} 
+                      className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <Briefcase className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-foreground truncate max-w-[130px]">{item.name}</p>
+                          <p className="text-[10px] text-muted">Role Category</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <CurrencyDisplay 
+                          value={item.median} 
+                          currency="USD" 
+                          className="text-xs font-black text-emerald-500 dark:text-emerald-400" 
+                        />
+                        <p className="text-[9px] text-muted">USD Eq.</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Progression Equivalent Matrix */}
+              <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
+                <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-3 flex items-center gap-2">
+                  <Landmark className="w-3.5 h-3.5 text-cyan-500" />
+                  Grade Matrix
+                </h3>
+                <p className="text-[10px] text-muted mb-4 leading-relaxed">
+                  Equivalent levels cross-mapping for standard Software Engineering bands.
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[10px]">
+                    <thead>
+                      <tr className="border-b border-border/80 text-muted uppercase font-bold tracking-wider">
+                        <th className="py-1.5 pb-2 font-bold">Equiv</th>
+                        <th className="py-1.5 pb-2 font-bold">Google</th>
+                        <th className="py-1.5 pb-2 font-bold">Meta</th>
+                        <th className="py-1.5 pb-2 font-bold">MSFT</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/40 font-semibold text-foreground">
+                      <tr className="hover:bg-card-hover/20">
+                        <td className="py-2 text-muted">Entry</td>
+                        <td className="py-2 text-indigo-400">L3</td>
+                        <td className="py-2 text-emerald-400">E3</td>
+                        <td className="py-2 text-amber-400">59</td>
+                      </tr>
+                      <tr className="hover:bg-card-hover/20">
+                        <td className="py-2 text-muted">Mid</td>
+                        <td className="py-2 text-indigo-400">L4</td>
+                        <td className="py-2 text-emerald-400">E4</td>
+                        <td className="py-2 text-amber-400">61</td>
+                      </tr>
+                      <tr className="hover:bg-card-hover/20">
+                        <td className="py-2 text-muted">Senior</td>
+                        <td className="py-2 text-indigo-400">L5</td>
+                        <td className="py-2 text-emerald-400">E5</td>
+                        <td className="py-2 text-amber-400">63</td>
+                      </tr>
+                      <tr className="hover:bg-card-hover/20">
+                        <td className="py-2 text-muted">Staff</td>
+                        <td className="py-2 text-indigo-400">L6</td>
+                        <td className="py-2 text-emerald-400">E6</td>
+                        <td className="py-2 text-amber-400">65</td>
+                      </tr>
+                      <tr className="hover:bg-card-hover/20">
+                        <td className="py-2 text-muted">Principal</td>
+                        <td className="py-2 text-indigo-400">L7</td>
+                        <td className="py-2 text-emerald-400">E7</td>
+                        <td className="py-2 text-amber-400">67</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -367,13 +522,33 @@ export default function DashboardClient({
         )}
 
         {activeTab === "submit" && (
-          <div className="max-w-xl mx-auto bg-card border border-border rounded-xl shadow-md p-6">
-            <div className="mb-6 border-b border-border pb-4">
-              <h2 className="text-lg font-bold text-foreground">Submit Compensation Record</h2>
-              <p className="text-muted text-xs mt-0.5">
-                Contribute anonymized verified salary data. Levels-equivalency will be resolved dynamically.
+          !currentUser ? (
+            <div className="max-w-xl mx-auto bg-card border border-border rounded-2xl shadow-xl p-8 text-center animate-fadeIn">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
+                <Lock className="w-8 h-8" />
+              </div>
+              <h2 className="text-lg font-black text-foreground mb-2">Authentication Required</h2>
+              <p className="text-muted text-xs max-w-sm mx-auto mb-6 leading-relaxed">
+                To guarantee the accuracy and integrity of our compensation dataset, only verified registered users can submit salaries. Your submissions are kept strictly anonymous.
               </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xs mx-auto">
+                <button
+                  onClick={() => setIsAuthOpen(true)}
+                  className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_12px_rgba(99,102,241,0.2)]"
+                >
+                  Sign In / Sign Up
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
+          ) : (
+            <div className="max-w-xl mx-auto bg-card border border-border rounded-2xl shadow-xl p-6 animate-fadeIn">
+              <div className="mb-6 border-b border-border pb-4">
+                <h2 className="text-lg font-bold text-foreground">Submit Compensation Record</h2>
+                <p className="text-muted text-xs mt-0.5">
+                  Contribute anonymized verified salary data. Levels-equivalency will be resolved dynamically.
+                </p>
+              </div>
 
             <form onSubmit={handleFormSubmit} className="space-y-4">
               {/* Alert notices */}
@@ -574,8 +749,10 @@ export default function DashboardClient({
               </button>
             </form>
           </div>
+          )
         )}
       </div>
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </div>
   );
 }

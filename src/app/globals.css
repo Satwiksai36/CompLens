@@ -1,7 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  /* Default to premium dark mode: Linear/Stripe/Vercel hybrid */
+  /* Default: Clean white light mode — levels.fyi inspired */
+  --background: #ffffff;
+  --card: #ffffff;
+  --card-hover: #f8fafc;
+  --border: #e8ecf0;
+  --border-glow: #c7d2fe;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --accent: #0891b2;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --card-foreground: #0f172a;
+  --ring: rgba(79, 70, 229, 0.12);
+
+  /* Subtle light mode enhancements */
+  --glow-color: rgba(79, 70, 229, 0.04);
+  --accent-glow: rgba(8, 145, 178, 0.02);
+  --grid-color: rgba(15, 23, 42, 0.025);
+
+  /* Fonts mapping matching levels.fyi Inter theme */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
+  --font-mono: var(--font-inter);
+}
+
+.dark {
+  /* Premium dark mode: Linear/Stripe/Vercel hybrid */
   --background: #09090b;
   --card: #121214;
   --card-hover: #18181b;
@@ -14,37 +40,11 @@
   --muted: #8e8e9f;
   --card-foreground: #fafafa;
   --ring: rgba(99, 102, 241, 0.25);
-  
-  /* Modern premium enhancements */
+
+  /* Dark mode enhancements */
   --glow-color: rgba(99, 102, 241, 0.09);
   --accent-glow: rgba(6, 182, 212, 0.05);
   --grid-color: rgba(255, 255, 255, 0.015);
-
-  /* Fonts mapping matching levels.fyi Inter theme */
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-inter);
-  --font-mono: var(--font-inter);
-}
-
-:root.light {
-  /* Premium light mode: Levels.fyi + Apple Dashboard hybrid */
-  --background: #f8fafc;
-  --card: #ffffff;
-  --card-hover: #f1f5f9;
-  --border: #e2e8f0;
-  --border-glow: #cbd5e1;
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --accent: #0891b2;
-  --foreground: #0f172a;
-  --muted: #64748b;
-  --card-foreground: #0f172a;
-  --ring: rgba(79, 70, 229, 0.12);
-  
-  /* Modern premium enhancements */
-  --glow-color: rgba(79, 70, 229, 0.035);
-  --accent-glow: rgba(8, 145, 178, 0.02);
-  --grid-color: rgba(15, 23, 42, 0.02);
 }
 
 @theme inline {
@@ -102,13 +102,12 @@ h1, h2, h3, h4, h5, h6, .font-display {
 .currency-symbol {
   font-family: var(--font-display), sans-serif !important;
   color: var(--primary);
-  text-shadow: 0 0 10px rgba(99, 102, 241, 0.35);
+  text-shadow: 0 0 8px rgba(79, 70, 229, 0.2);
   font-weight: 700;
 }
 
-.light .currency-symbol {
-  color: var(--primary-hover);
-  text-shadow: 0 0 8px rgba(79, 70, 229, 0.2);
+.dark .currency-symbol {
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.35);
 }
 
 /* Gradient Text styles */
@@ -116,42 +115,37 @@ h1, h2, h3, h4, h5, h6, .font-display {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #ffffff 40%, #a1a1aa 100%);
+  background-image: linear-gradient(135deg, #0f172a 40%, #475569 100%);
 }
 
-.light .text-gradient {
-  background-image: linear-gradient(135deg, #0f172a 40%, #475569 100%);
+.dark .text-gradient {
+  background-image: linear-gradient(135deg, #ffffff 40%, #a1a1aa 100%);
 }
 
 .text-gradient-primary {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #818cf8 0%, #34d399 100%);
+  background-image: linear-gradient(135deg, #4f46e5 0%, #059669 100%);
 }
 
-.light .text-gradient-primary {
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #4f46e5 0%, #059669 100%);
+.dark .text-gradient-primary {
+  background-image: linear-gradient(135deg, #818cf8 0%, #34d399 100%);
 }
 
 /* Premium Card and Interactive Shadows */
 .glass-card {
-  background-color: rgba(18, 18, 20, 0.7);
+  background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
 }
 
-.light .glass-card {
-  background-color: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+.dark .glass-card {
+  background-color: rgba(18, 18, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* Advanced Card Interactivity */
@@ -159,32 +153,17 @@ h1, h2, h3, h4, h5, h6, .font-display {
   transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
-.interactive-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.6;
-  transition: opacity 300ms ease;
-}
 
 .interactive-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   background-color: var(--card-hover);
-  border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.05);
+  border-color: rgba(79, 70, 229, 0.2);
+  box-shadow: 0 12px 32px -10px rgba(79, 70, 229, 0.1);
 }
 
-.light .interactive-card:hover {
-  background-color: var(--card-hover);
-  border-color: rgba(79, 70, 229, 0.15);
-  box-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.06);
+.dark .interactive-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2), 0 0 0 1px rgba(99, 102, 241, 0.06);
 }
 
 /* Company Logo Badges */
@@ -220,11 +199,11 @@ h1, h2, h3, h4, h5, h6, .font-display {
   filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.3));
 }
 .star-empty {
-  color: #27272a;
+  color: #cbd5e1;
   font-size: 1.15rem;
 }
-.light .star-empty {
-  color: #cbd5e1;
+.dark .star-empty {
+  color: #27272a;
 }
 
 /* Reviews Pros/Cons badges */
@@ -242,22 +221,18 @@ h1, h2, h3, h4, h5, h6, .font-display {
 .company-badge-tag.pro {
   background-color: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-}
-.light .company-badge-tag.pro {
-  background-color: rgba(16, 185, 129, 0.04);
-  border-color: rgba(16, 185, 129, 0.15);
   color: #059669;
 }
-.company-badge-tag.con {
-  background-color: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+.dark .company-badge-tag.pro {
+  color: #34d399;
 }
-.light .company-badge-tag.con {
-  background-color: rgba(239, 68, 68, 0.04);
-  border-color: rgba(239, 68, 68, 0.15);
+.company-badge-tag.con {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.18);
   color: #dc2626;
+}
+.dark .company-badge-tag.con {
+  color: #f87171;
 }
 
 /* Autocomplete search suggestions list */
@@ -266,12 +241,12 @@ h1, h2, h3, h4, h5, h6, .font-display {
   top: 100%;
   left: 0;
   right: 0;
-  background-color: rgba(18, 18, 20, 0.95);
+  background-color: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0,0,0,0.04);
   z-index: 100;
   max-height: 280px;
   overflow-y: auto;
@@ -279,10 +254,10 @@ h1, h2, h3, h4, h5, h6, .font-display {
   margin-top: 0.6rem;
 }
 
-.light .autocomplete-suggestions-list {
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+.dark .autocomplete-suggestions-list {
+  background-color: rgba(18, 18, 20, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .autocomplete-suggestion-item {
@@ -312,12 +287,12 @@ h1, h2, h3, h4, h5, h6, .font-display {
   font-weight: 800;
   text-transform: uppercase;
   color: var(--muted);
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(0, 0, 0, 0.05);
   padding: 0.15rem 0.5rem;
   border-radius: 0.35rem;
 }
-.light .suggestion-type {
-  background-color: rgba(0, 0, 0, 0.05);
+.dark .suggestion-type {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Animations */
@@ -333,8 +308,8 @@ h1, h2, h3, h4, h5, h6, .font-display {
 /* Segmented Control styling for Tab buttons */
 .tab-navigator {
   display: flex;
-  background-color: rgba(18, 18, 20, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 0.25rem;
   border-radius: 9999px;
   backdrop-filter: blur(12px);
@@ -343,9 +318,9 @@ h1, h2, h3, h4, h5, h6, .font-display {
   overflow-x: auto;
 }
 
-.light .tab-navigator {
-  background-color: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+.dark .tab-navigator {
+  background-color: rgba(18, 18, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Modern inputs focus rings */
