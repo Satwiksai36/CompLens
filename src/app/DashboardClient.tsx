@@ -411,7 +411,7 @@ export default function DashboardClient({
 
                 {/* Submit CTA */}
                 {!currentUser && (
-                  <div className="bg-gradient-to-br from-primary/10 to-accent/5 backdrop-blur-md border border-primary/20 rounded-2xl p-6 text-center shadow-lg shadow-primary/5">
+                  <div className="bg-linear-to-br from-primary/10 to-accent/5 backdrop-blur-md border border-primary/20 rounded-2xl p-6 text-center shadow-lg shadow-primary/5">
                     <h4 className="text-sm font-black text-foreground mb-1.5">Know your worth?</h4>
                     <p className="text-xs text-muted font-semibold mb-4 leading-relaxed">Share your salary anonymously and help the developer community make better career decisions.</p>
                     <button
