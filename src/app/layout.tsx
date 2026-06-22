@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 
-const inter = Inter({
-  variable: "--font-inter",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "CompLens — Compensation Intelligence Platform",
-  description: "Understand compensation beyond job titles. Direct comparison and matrix analytics of software industry level grades.",
+  title: "CompLens | Salaries & Tools to Level Up Your Career",
+  description: "Search thousands of data points for different companies, job titles, career levels, and locations. Explore compensation data to help you get paid more!",
 };
 
 export default function RootLayout({
@@ -21,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${nunito.variable} antialiased`}>
         <Header />
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <main className="min-h-screen">
           {children}
         </main>
       </body>

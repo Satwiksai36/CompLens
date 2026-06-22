@@ -8,7 +8,7 @@ import { LevelMatrix } from "@/components/LevelMatrix";
 import { ComparisonWorkspace } from "@/components/ComparisonWorkspace";
 import { LocationMatrix } from "@/components/LocationMatrix";
 import { submitCompensation } from "@/actions/compensation.actions";
-import { DollarSign, Landmark, Briefcase, MapPin, Send, AlertCircle, CheckCircle2, Lock, ArrowRight } from "lucide-react";
+import { DollarSign, Landmark, Briefcase, MapPin, Send, AlertCircle, CheckCircle2, Lock, ArrowRight, TrendingUp, BarChart2 } from "lucide-react";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
 import AuthModal from "@/components/AuthModal";
 import { CompanyLogo } from "@/components/CompanyLogo";
@@ -30,11 +30,9 @@ export default function DashboardClient({
   initialLevels,
   currentUser,
 }: DashboardClientProps) {
-  // Navigation Tabs: explore | levels | compare | location | submit
   const [activeTab, setActiveTab] = useState<"explore" | "levels" | "compare" | "location" | "submit">("explore");
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  // Filter States (Explore Tab)
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: "",
     locationId: "",
@@ -43,7 +41,7 @@ export default function DashboardClient({
     locationTier: "",
   });
 
-  // Submission Form State
+  // Submission state
   const [subCompId, setSubCompId] = useState(initialCompanies[0]?.id || "");
   const [subRoleId, setSubRoleId] = useState(initialRoles[0]?.id || "");
   const [subLocId, setSubLocId] = useState(initialLocations[0]?.id || "");
@@ -53,66 +51,47 @@ export default function DashboardClient({
   const [subBonus, setSubBonus] = useState("");
   const [subJoining, setSubJoining] = useState("");
   const [subCurrency, setSubCurrency] = useState("USD");
-  const [subLevelId, setSubLevelId] = useState(""); // For disclosed path
-  const [subDesignation, setSubDesignation] = useState(""); // For estimated path
+  const [subLevelId, setSubLevelId] = useState("");
+  const [subDesignation, setSubDesignation] = useState("");
   const [isPending, startTransition] = useTransition();
-
   const [formStatus, setFormStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
-  // Helper to convert to USD
   const getUSDValue = (amount: number, currency: string): number => {
-    const toUSD: Record<string, number> = {
-      USD: 1.0,
-      INR: 0.012,
-      GBP: 1.25,
-      EUR: 1.08,
-    };
+    const toUSD: Record<string, number> = { USD: 1.0, INR: 0.012, GBP: 1.25, EUR: 1.08 };
     return amount * (toUSD[currency.toUpperCase()] || 1.0);
   };
 
-  // 1. Calculate Dashboard Summary Statistics
+  // Summary stats
   const verifiedRecords = initialRecords.filter((r) => r.verificationStatus === "VERIFIED");
   const totalCompanies = initialCompanies.length;
   const totalRoles = initialRoles.length;
 
-  // Unified Median pay calculation
   const allUSDComps = verifiedRecords.map((r) => getUSDValue(r.totalCompensation, r.currency)).sort((a, b) => a - b);
-  let averageComp = 0;
+  let medianComp = 0;
   if (allUSDComps.length > 0) {
     const mid = Math.floor(allUSDComps.length / 2);
-    averageComp = allUSDComps.length % 2 !== 0 ? allUSDComps[mid] : (allUSDComps[mid - 1] + allUSDComps[mid]) / 2;
+    medianComp = allUSDComps.length % 2 !== 0 ? allUSDComps[mid] : (allUSDComps[mid - 1] + allUSDComps[mid]) / 2;
   }
 
-  // Highest paying company
+  // Top paying companies
   const companyPayMap: Record<string, number[]> = {};
   verifiedRecords.forEach((r) => {
     if (!companyPayMap[r.company.name]) companyPayMap[r.company.name] = [];
     companyPayMap[r.company.name].push(getUSDValue(r.totalCompensation, r.currency));
   });
 
-  let highestPayingCompany = "N/A";
-  let highestPayingMedian = 0;
-
-  Object.entries(companyPayMap).forEach(([compName, comps]) => {
-    comps.sort((a, b) => a - b);
-    const mid = Math.floor(comps.length / 2);
-    const median = comps.length % 2 !== 0 ? comps[mid] : (comps[mid - 1] + comps[mid]) / 2;
-    if (median > highestPayingMedian) {
-      highestPayingMedian = median;
-      highestPayingCompany = compName;
-    }
-  });
-
-  // Top 5 paying companies calculation
   const companyMedianPay = Object.entries(companyPayMap).map(([name, comps]) => {
     comps.sort((a, b) => a - b);
     const mid = Math.floor(comps.length / 2);
     const median = comps.length % 2 !== 0 ? comps[mid] : (comps[mid - 1] + comps[mid]) / 2;
     const compRecord = initialCompanies.find(c => c.name === name);
-    return { name, median, logo: compRecord?.logo || 'logo-default' };
+    return { name, median, logo: compRecord?.logo || "logo-default" };
   }).sort((a, b) => b.median - a.median).slice(0, 5);
 
-  // Top 5 paying roles calculation
+  let highestPayingCompany = companyMedianPay[0]?.name || "N/A";
+  let highestPayingMedian = companyMedianPay[0]?.median || 0;
+
+  // Top paying roles
   const rolePayMap: Record<string, number[]> = {};
   verifiedRecords.forEach((r) => {
     if (!rolePayMap[r.role.roleName]) rolePayMap[r.role.roleName] = [];
@@ -125,9 +104,8 @@ export default function DashboardClient({
     return { name, median };
   }).sort((a, b) => b.median - a.median).slice(0, 5);
 
-  // 2. Filter Compensation Records Dynamically
+  // Filter records
   const filteredRecords = verifiedRecords.filter((rec) => {
-    // A. Search query matching
     const query = filters.searchQuery.toLowerCase();
     const matchesSearch =
       query === "" ||
@@ -135,11 +113,7 @@ export default function DashboardClient({
       rec.role.roleName.toLowerCase().includes(query) ||
       rec.level.levelCode.toLowerCase().includes(query) ||
       rec.level.equivalentLevel.toLowerCase().includes(query);
-
-    // B. Location ID matching
     const matchesLoc = filters.locationId === "" || rec.locationId === filters.locationId;
-
-    // C. Experience Band matching
     let matchesExp = true;
     if (filters.experienceLevel) {
       const yoe = rec.yearsExperience;
@@ -150,11 +124,7 @@ export default function DashboardClient({
       else if (filters.experienceLevel === "13-15 Years") matchesExp = yoe > 13 && yoe <= 15;
       else if (filters.experienceLevel === "15+ Years") matchesExp = yoe > 15;
     }
-
-    // D. Equivalent Level matching
     const matchesLevel = filters.equivalentLevel === "" || rec.level.equivalentLevel === filters.equivalentLevel;
-
-    // E. Location Tier matching
     let matchesTier = true;
     if (filters.locationTier) {
       const col = rec.location.costOfLivingIndex;
@@ -162,11 +132,9 @@ export default function DashboardClient({
       else if (filters.locationTier === "Tier 2") matchesTier = col >= 40.0 && col < 90.0;
       else if (filters.locationTier === "Tier 3") matchesTier = col < 40.0;
     }
-
     return matchesSearch && matchesLoc && matchesExp && matchesLevel && matchesTier;
   });
 
-  // Map to table structure format
   const tableData = filteredRecords.map((r) => ({
     id: r.id,
     companyName: r.company.name,
@@ -187,571 +155,398 @@ export default function DashboardClient({
     locationCountry: r.location.country,
   }));
 
-  // Find if selected company has a disclosed framework
   const selectedComp = initialCompanies.find((c) => c.id === subCompId);
   const isDisclosed = selectedComp?.levels.some((l: { mappingType: string }) => l.mappingType === "disclosed") ?? false;
   const disclosedLevels = selectedComp?.levels.filter((l: { mappingType: string }) => l.mappingType === "disclosed") || [];
 
-  // Update default subLevelId on company toggle
   React.useEffect(() => {
-    if (disclosedLevels.length > 0) {
-      setSubLevelId(disclosedLevels[0].id);
-    } else {
-      setSubLevelId("");
-    }
+    if (disclosedLevels.length > 0) setSubLevelId(disclosedLevels[0].id);
+    else setSubLevelId("");
   }, [subCompId]);
 
-  // Form submission handler
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus(null);
-
     const base = parseFloat(subBase || "0");
     const stock = parseFloat(subStock || "0");
     const bonus = parseFloat(subBonus || "0");
     const joining = parseFloat(subJoining || "0");
     const yoe = parseInt(subYoe || "0");
-
-    if (isNaN(base) || base <= 0) {
-      setFormStatus({ type: "error", message: "Base salary must be a positive number." });
-      return;
-    }
-    if (isNaN(yoe) || yoe < 0) {
-      setFormStatus({ type: "error", message: "Years of experience must be a non-negative integer." });
-      return;
-    }
-
+    if (isNaN(base) || base <= 0) { setFormStatus({ type: "error", message: "Base salary must be a positive number." }); return; }
+    if (isNaN(yoe) || yoe < 0) { setFormStatus({ type: "error", message: "Years of experience must be a non-negative integer." }); return; }
     startTransition(async () => {
       const res = await submitCompensation({
-        companyId: subCompId,
-        roleId: subRoleId,
-        locationId: subLocId,
-        yearsExperience: yoe,
-        baseSalary: base,
-        stockGrant: stock,
-        bonus,
-        joiningBonus: joining,
-        currency: subCurrency,
-        levelId: isDisclosed ? subLevelId : undefined,
+        companyId: subCompId, roleId: subRoleId, locationId: subLocId,
+        yearsExperience: yoe, baseSalary: base, stockGrant: stock, bonus, joiningBonus: joining,
+        currency: subCurrency, levelId: isDisclosed ? subLevelId : undefined,
         designation: !isDisclosed ? subDesignation : undefined,
       });
-
       if (res.success) {
-        setFormStatus({
-          type: "success",
-          message: "Thank you! Your compensation has been submitted for verification.",
-        });
-        setSubBase("");
-        setSubStock("");
-        setSubBonus("");
-        setSubJoining("");
-        setSubYoe("");
-        setSubDesignation("");
+        setFormStatus({ type: "success", message: "Thank you! Your compensation has been submitted for verification." });
+        setSubBase(""); setSubStock(""); setSubBonus(""); setSubJoining(""); setSubYoe(""); setSubDesignation("");
       } else {
         setFormStatus({ type: "error", message: res.error || "Failed to submit." });
       }
     });
   };
 
+  const tabItems = [
+    { id: "explore", label: "Explore" },
+    { id: "levels", label: "Compare Levels" },
+    { id: "compare", label: "Companies" },
+    { id: "location", label: "Locations" },
+    { id: "submit", label: "Add Salary" },
+  ] as const;
+
   return (
-    <div className="space-y-8 animate-fadeIn">
-      {/* Hero explore buttons */}
-      <div className="flex justify-center mt-2 mb-4">
-        <div className="tab-navigator shadow-md bg-white dark:bg-card border border-border p-1 rounded-full flex gap-1">
-          <button
-            onClick={() => setActiveTab("explore")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
-              activeTab === "explore"
-                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
-                : "text-muted hover:text-foreground hover:bg-card-hover/40"
-            }`}
-          >
-            Explore
-          </button>
-          <button
-            onClick={() => setActiveTab("levels")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
-              activeTab === "levels"
-                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
-                : "text-muted hover:text-foreground hover:bg-card-hover/40"
-            }`}
-          >
-            Compare Levels
-          </button>
-          <button
-            onClick={() => setActiveTab("compare")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
-              activeTab === "compare"
-                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
-                : "text-muted hover:text-foreground hover:bg-card-hover/40"
-            }`}
-          >
-            Compare Companies
-          </button>
-          <button
-            onClick={() => setActiveTab("location")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
-              activeTab === "location"
-                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
-                : "text-muted hover:text-foreground hover:bg-card-hover/40"
-            }`}
-          >
-            Location Hub
-          </button>
-          <button
-            onClick={() => setActiveTab("submit")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-300 ${
-              activeTab === "submit"
-                ? "bg-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.3)] scale-105"
-                : "text-muted hover:text-foreground hover:bg-card-hover/40"
-            }`}
-          >
-            Submit Salary
-          </button>
-        </div>
-      </div>
+    <div className="page-home">
+      {/* ── Hero / Search ── */}
+      <FilterHero
+        locations={initialLocations}
+        companies={initialCompanies}
+        roles={initialRoles}
+        onFilterChange={(next) => setFilters(next)}
+      />
 
-      {/* 1. Dashboard summary cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        {/* Companies card */}
-        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Total Companies</span>
-            <Landmark className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
-          </div>
-          <div className="text-3xl font-black text-slate-900 dark:text-white font-display">{totalCompanies}</div>
-          <div className="text-[10px] text-muted font-medium mt-1">Seeded corporate tech networks</div>
-        </div>
+      {/* ── Main Content Area ── */}
+      <div className="main-container py-6">
 
-        {/* Roles card */}
-        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Active Roles</span>
-            <Briefcase className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
-          </div>
-          <div className="text-3xl font-black text-slate-900 dark:text-white font-display">{totalRoles}</div>
-          <div className="text-[10px] text-muted font-medium mt-1">Spans SE, PM, Data Science and Design</div>
-        </div>
-
-        {/* Average comp card */}
-        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Global Median Pay</span>
-            <DollarSign className="w-5 h-5 text-emerald-500" />
-          </div>
-          <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-display">
-            <CurrencyDisplay value={averageComp} currency="USD" className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-display" />
-          </div>
-          <div className="text-[10px] text-muted font-medium mt-1">USD equivalent normalized annually</div>
-        </div>
-
-        {/* Highest paying company card */}
-        <div className="bg-white dark:bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between text-muted mb-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-zinc-500">Top Paying Employer</span>
-            <MapPin className="w-5 h-5 text-amber-500" />
-          </div>
-          <div className="text-xl font-black text-slate-900 dark:text-white font-display truncate">{highestPayingCompany}</div>
-          <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-            <CurrencyDisplay value={highestPayingMedian} currency="USD" className="text-xs font-bold text-emerald-600 dark:text-emerald-400" />
-            <span className="text-[9px] text-muted font-normal ml-1">median TC</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* 2. Main Tab Views */}
-      <div className="w-full">
-        {activeTab === "explore" && (
-          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
-            {/* Left Column (70%) */}
-            <div className="lg:col-span-7 space-y-6 animate-fadeIn">
-              <FilterHero
-                locations={initialLocations}
-                companies={initialCompanies}
-                roles={initialRoles}
-                onFilterChange={(next) => setFilters(next)}
-              />
-              <div className="flex justify-between items-center px-2">
-                <span className="text-[10px] font-extrabold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
-                  Verified Salaries ({tableData.length} records matching)
-                </span>
-              </div>
-              <CompensationTable datapoints={tableData} />
+        {/* ── Stats Bar ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div className="stat-card flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[var(--primary-faded)] dark:bg-[var(--primary-faded)] flex items-center justify-center shrink-0">
+              <Landmark className="w-4 h-4 text-[var(--primary)]" />
             </div>
+            <div>
+              <div className="text-xl font-black text-[var(--foreground)]">{totalCompanies}</div>
+              <div className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wide">Companies</div>
+            </div>
+          </div>
+          <div className="stat-card flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#e8f6f1] dark:bg-[var(--accent-faded)] flex items-center justify-center shrink-0">
+              <Briefcase className="w-4 h-4 text-[var(--accent)]" />
+            </div>
+            <div>
+              <div className="text-xl font-black text-[var(--foreground)]">{totalRoles}</div>
+              <div className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wide">Roles</div>
+            </div>
+          </div>
+          <div className="stat-card flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#fef3c7] dark:bg-[#3b2f00] flex items-center justify-center shrink-0">
+              <BarChart2 className="w-4 h-4 text-amber-600" />
+            </div>
+            <div>
+              <div className="text-xl font-black text-[var(--foreground)]">{verifiedRecords.length}</div>
+              <div className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wide">Salary Reports</div>
+            </div>
+          </div>
+          <div className="stat-card flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#e8f6f1] dark:bg-[var(--accent-faded)] flex items-center justify-center shrink-0">
+              <DollarSign className="w-4 h-4 text-[var(--accent)]" />
+            </div>
+            <div>
+              <CurrencyDisplay value={medianComp} currency="USD" className="text-xl font-black text-[var(--accent)]" />
+              <div className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wide">Median TC</div>
+            </div>
+          </div>
+        </div>
 
-            {/* Right Sidebar Section (30%) */}
-            <div className="lg:col-span-3 space-y-6">
-              {/* Top Paying Companies */}
-              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-4 flex items-center gap-2 border-b border-border pb-2.5">
-                  <span className="text-amber-500 text-base leading-none">★</span>
-                  Top Paying Companies
-                </h3>
-                <div className="space-y-3">
-                  {companyMedianPay.map((item) => (
-                    <div 
-                      key={item.name} 
-                      className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
-                    >
-                      <div className="flex items-center gap-3">
-                        <CompanyLogo name={item.name} size={32} className="shrink-0" />
-                        <div>
-                          <p className="text-xs font-bold text-slate-900 dark:text-white">{item.name}</p>
-                          <p className="text-[10px] text-muted">Median Annual Pay</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <CurrencyDisplay 
-                          value={item.median} 
-                          currency="USD" 
-                          className="text-xs font-black text-emerald-600 dark:text-emerald-400" 
-                        />
-                        <p className="text-[9px] text-muted">USD Eq.</p>
-                      </div>
-                    </div>
-                  ))}
+        {/* ── Tab Bar ── */}
+        <div className="flex items-center gap-1 mb-4 border-b border-[var(--border)] overflow-x-auto pb-px" style={{ scrollbarWidth: "none" }}>
+          {tabItems.map(({ id, label }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`px-4 py-2.5 text-sm font-bold whitespace-nowrap cursor-pointer transition-colors duration-150 border-b-2 -mb-px ${
+                activeTab === id
+                  ? "text-[var(--primary)] border-[var(--primary)]"
+                  : "text-[var(--muted)] border-transparent hover:text-[var(--foreground)] hover:border-[var(--border)]"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+          {/* Add Salary button on right */}
+          {currentUser && activeTab !== "submit" && (
+            <button
+              onClick={() => setActiveTab("submit")}
+              className="ml-auto flex items-center gap-1.5 text-xs font-bold text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)] px-3 py-1.5 rounded-lg cursor-pointer transition-colors shrink-0"
+            >
+              <Send className="w-3.5 h-3.5" />
+              Add Salary
+            </button>
+          )}
+        </div>
+
+        {/* ── Tab Content ── */}
+        <div className="animate-fadeIn" key={activeTab}>
+          {activeTab === "explore" && (
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+              {/* Left: Data Table */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-[var(--foreground)]">
+                    {tableData.length === verifiedRecords.length
+                      ? `${tableData.length} Verified Salary Reports`
+                      : `${tableData.length} matching results (of ${verifiedRecords.length})`}
+                  </span>
+                  <span className="text-xs text-[var(--muted)] hidden md:block">Click a row to expand details</span>
                 </div>
+                <CompensationTable datapoints={tableData} />
               </div>
 
-              {/* Top Paying Roles */}
-              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-4 flex items-center gap-2 border-b border-border pb-2.5">
-                  <Briefcase className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-                  Top Paying Roles
-                </h3>
-                <div className="space-y-3">
-                  {roleMedianPay.map((item) => (
-                    <div 
-                      key={item.name} 
-                      className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 dark:bg-indigo-400/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
-                          <Briefcase className="w-3.5 h-3.5" />
+              {/* Right: Sidebar widgets */}
+              <div className="space-y-4">
+                {/* Top Paying Companies */}
+                <div className="levels-card p-4">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)] mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    Top Paying Companies
+                  </h3>
+                  <div className="space-y-2">
+                    {companyMedianPay.length > 0 ? companyMedianPay.map((item, idx) => (
+                      <div key={item.name} className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-[var(--card-hover)] transition-colors cursor-pointer">
+                        <span className="text-[10px] font-black text-[var(--muted)] w-4 shrink-0">#{idx + 1}</span>
+                        <CompanyLogo name={item.name} size={28} className="shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-[var(--foreground)] truncate">{item.name}</p>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[130px]">{item.name}</p>
-                          <p className="text-[10px] text-muted">Role Category</p>
-                        </div>
+                        <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-[var(--accent)] shrink-0" />
                       </div>
-                      <div className="text-right">
-                        <CurrencyDisplay 
-                          value={item.median} 
-                          currency="USD" 
-                          className="text-xs font-black text-emerald-600 dark:text-emerald-400" 
-                        />
-                        <p className="text-[9px] text-muted">USD Eq.</p>
-                      </div>
-                    </div>
-                  ))}
+                    )) : (
+                      <p className="text-xs text-[var(--muted)] text-center py-4">No data available yet</p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Progression Equivalent Matrix */}
-              <div className="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300">
-                <h3 className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white mb-3 flex items-center gap-2 border-b border-border pb-2.5">
-                  <Landmark className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
-                  Grade Matrix
-                </h3>
-                <p className="text-[10px] text-muted mb-4 leading-relaxed">
-                  Equivalent levels cross-mapping for standard Software Engineering bands.
-                </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-[10px]">
+                {/* Top Paying Roles */}
+                <div className="levels-card p-4">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)] mb-3 flex items-center gap-2">
+                    <Briefcase className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    Top Paying Roles
+                  </h3>
+                  <div className="space-y-2">
+                    {roleMedianPay.length > 0 ? roleMedianPay.map((item, idx) => (
+                      <div key={item.name} className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-[var(--card-hover)] transition-colors cursor-pointer">
+                        <span className="text-[10px] font-black text-[var(--muted)] w-4 shrink-0">#{idx + 1}</span>
+                        <div className="w-7 h-7 rounded-lg bg-[var(--primary-faded)] flex items-center justify-center shrink-0">
+                          <Briefcase className="w-3.5 h-3.5 text-[var(--primary)]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-[var(--foreground)] truncate">{item.name}</p>
+                        </div>
+                        <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-[var(--accent)] shrink-0" />
+                      </div>
+                    )) : (
+                      <p className="text-xs text-[var(--muted)] text-center py-4">No data available yet</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Level Grade Matrix */}
+                <div className="levels-card p-4">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[var(--foreground)] mb-1 flex items-center gap-2">
+                    <Landmark className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    Grade Equivalency
+                  </h3>
+                  <p className="text-[10px] text-[var(--muted)] mb-3">SE level cross-mapping across major tech companies</p>
+                  <table className="w-full text-left text-[11px]">
                     <thead>
-                      <tr className="border-b border-border text-muted uppercase font-bold tracking-wider">
-                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Equiv</th>
-                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Google</th>
-                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">Meta</th>
-                        <th className="py-1.5 pb-2 font-bold text-slate-400 dark:text-zinc-500">MSFT</th>
+                      <tr className="border-b border-[var(--border)]">
+                        <th className="pb-1.5 font-bold text-[var(--muted)] text-[10px] uppercase">Band</th>
+                        <th className="pb-1.5 font-bold text-[var(--muted)] text-[10px] uppercase">Google</th>
+                        <th className="pb-1.5 font-bold text-[var(--muted)] text-[10px] uppercase">Meta</th>
+                        <th className="pb-1.5 font-bold text-[var(--muted)] text-[10px] uppercase">MSFT</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border/40 font-semibold text-slate-700 dark:text-zinc-300">
-                      <tr className="hover:bg-card-hover/20">
-                        <td className="py-2.5 text-muted">Entry</td>
-                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L3</td>
-                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E3</td>
-                        <td className="py-2.5 text-amber-600 dark:text-amber-400">59</td>
-                      </tr>
-                      <tr className="hover:bg-card-hover/20">
-                        <td className="py-2.5 text-muted">Mid</td>
-                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L4</td>
-                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E4</td>
-                        <td className="py-2.5 text-amber-600 dark:text-amber-400">61</td>
-                      </tr>
-                      <tr className="hover:bg-card-hover/20">
-                        <td className="py-2.5 text-muted">Senior</td>
-                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L5</td>
-                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E5</td>
-                        <td className="py-2.5 text-amber-600 dark:text-amber-400">63</td>
-                      </tr>
-                      <tr className="hover:bg-card-hover/20">
-                        <td className="py-2.5 text-muted">Staff</td>
-                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L6</td>
-                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E6</td>
-                        <td className="py-2.5 text-amber-600 dark:text-amber-400">65</td>
-                      </tr>
-                      <tr className="hover:bg-card-hover/20">
-                        <td className="py-2.5 text-muted">Principal</td>
-                        <td className="py-2.5 text-indigo-600 dark:text-indigo-400">L7</td>
-                        <td className="py-2.5 text-emerald-600 dark:text-emerald-400">E7</td>
-                        <td className="py-2.5 text-amber-600 dark:text-amber-400">67</td>
-                      </tr>
+                    <tbody className="divide-y divide-[var(--border-light)]">
+                      {[
+                        { band: "Entry", g: "L3", m: "E3", ms: "59" },
+                        { band: "Mid", g: "L4", m: "E4", ms: "61" },
+                        { band: "Senior", g: "L5", m: "E5", ms: "63" },
+                        { band: "Staff", g: "L6", m: "E6", ms: "65" },
+                        { band: "Principal", g: "L7", m: "E7", ms: "67" },
+                      ].map((row) => (
+                        <tr key={row.band} className="hover:bg-[var(--card-hover)]">
+                          <td className="py-2 text-[var(--muted)] font-semibold">{row.band}</td>
+                          <td className="py-2 text-[var(--primary)] font-bold">{row.g}</td>
+                          <td className="py-2 text-[var(--accent)] font-bold">{row.m}</td>
+                          <td className="py-2 text-amber-600 dark:text-amber-400 font-bold">{row.ms}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
+
+                {/* Submit CTA */}
+                {!currentUser && (
+                  <div className="levels-card p-4 text-center" style={{ background: "linear-gradient(135deg, #f6f8fc 0%, #e8f0fc 100%)" }}>
+                    <h4 className="text-sm font-black text-[var(--foreground)] mb-1">Know your worth?</h4>
+                    <p className="text-xs text-[var(--muted)] mb-3">Share your salary anonymously and help the community.</p>
+                    <button
+                      onClick={() => setIsAuthOpen(true)}
+                      className="btn-primary text-xs py-2 px-4 w-full flex items-center justify-center gap-1.5"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      Add Your Salary
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === "levels" && <LevelMatrix companies={initialCompanies} />}
+          {activeTab === "levels" && <LevelMatrix companies={initialCompanies} />}
 
-        {activeTab === "compare" && (
-          <ComparisonWorkspace
-            companies={initialCompanies}
-            roles={initialRoles}
-            locations={initialLocations}
-          />
-        )}
+          {activeTab === "compare" && (
+            <ComparisonWorkspace
+              companies={initialCompanies}
+              roles={initialRoles}
+              locations={initialLocations}
+            />
+          )}
 
-        {activeTab === "location" && (
-          <LocationMatrix locations={initialLocations} records={verifiedRecords} />
-        )}
+          {activeTab === "location" && (
+            <LocationMatrix locations={initialLocations} records={verifiedRecords} />
+          )}
 
-        {activeTab === "submit" && (
-          !currentUser ? (
-            <div className="max-w-xl mx-auto bg-card border border-border rounded-2xl shadow-xl p-8 text-center animate-fadeIn">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
-                <Lock className="w-8 h-8" />
-              </div>
-              <h2 className="text-lg font-black text-foreground mb-2">Authentication Required</h2>
-              <p className="text-muted text-xs max-w-sm mx-auto mb-6 leading-relaxed">
-                To guarantee the accuracy and integrity of our compensation dataset, only verified registered users can submit salaries. Your submissions are kept strictly anonymous.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xs mx-auto">
+          {activeTab === "submit" && (
+            !currentUser ? (
+              <div className="max-w-lg mx-auto levels-card p-8 text-center animate-fadeIn">
+                <div className="w-14 h-14 bg-[var(--primary-faded)] rounded-full flex items-center justify-center mx-auto mb-5">
+                  <Lock className="w-7 h-7 text-[var(--primary)]" />
+                </div>
+                <h2 className="text-lg font-black text-[var(--foreground)] mb-2">Sign in to Submit</h2>
+                <p className="text-sm text-[var(--muted)] max-w-sm mx-auto mb-5">
+                  Only verified registered users can submit salaries to maintain data quality. Your submissions are 100% anonymous.
+                </p>
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_12px_rgba(99,102,241,0.2)]"
+                  className="btn-primary flex items-center justify-center gap-2 mx-auto px-6 py-2.5"
                 >
                   Sign In / Sign Up
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
-          ) : (
-            <div className="max-w-xl mx-auto bg-card border border-border rounded-2xl shadow-xl p-6 animate-fadeIn">
-              <div className="mb-6 border-b border-border pb-4">
-                <h2 className="text-lg font-bold text-foreground">Submit Compensation Record</h2>
-                <p className="text-muted text-xs mt-0.5">
-                  Contribute anonymized verified salary data. Levels-equivalency will be resolved dynamically.
-                </p>
-              </div>
+            ) : (
+              <div className="max-w-lg mx-auto levels-card p-6 animate-fadeIn">
+                <div className="mb-5 pb-4 border-b border-[var(--border)]">
+                  <h2 className="text-base font-black text-[var(--foreground)]">Add Salary Data</h2>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">Your submission is anonymized. Levels are auto-mapped for non-disclosed frameworks.</p>
+                </div>
 
-            <form onSubmit={handleFormSubmit} className="space-y-4">
-              {/* Alert notices */}
-              {formStatus && (
-                <div
-                  className={`p-3 rounded-lg border flex items-start gap-2.5 text-xs font-medium ${
-                    formStatus.type === "success"
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
-                      : "bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400"
-                  }`}
-                >
-                  {formStatus.type === "success" ? (
-                    <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  {formStatus && (
+                    <div className={`p-3 rounded-lg border flex items-start gap-2 text-xs font-semibold ${
+                      formStatus.type === "success"
+                        ? "bg-[var(--success-faded)] border-[var(--success)]/20 text-[var(--success)]"
+                        : "bg-[var(--danger-faded)] border-[var(--danger)]/20 text-[var(--danger)]"
+                    }`}>
+                      {formStatus.type === "success"
+                        ? <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                        : <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />}
+                      <span>{formStatus.message}</span>
+                    </div>
                   )}
-                  <span>{formStatus.message}</span>
-                </div>
-              )}
 
-              {/* Company Selector */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Company</label>
-                <select
-                  className="bg-card border border-border text-sm font-semibold rounded-lg p-2.5 outline-none cursor-pointer text-foreground"
-                  value={subCompId}
-                  onChange={(e) => setSubCompId(e.target.value)}
-                >
-                  {initialCompanies.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
+                  {/* Field style shared */}
+                  {[
+                    { label: "Company", node: (
+                      <select className="form-select" value={subCompId} onChange={(e) => setSubCompId(e.target.value)}>
+                        {initialCompanies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      </select>
+                    )},
+                    { label: "Role Type", node: (
+                      <select className="form-select" value={subRoleId} onChange={(e) => setSubRoleId(e.target.value)}>
+                        {initialRoles.map((r) => <option key={r.id} value={r.id}>{r.roleName}</option>)}
+                      </select>
+                    )},
+                    { label: "Location", node: (
+                      <select className="form-select" value={subLocId} onChange={(e) => setSubLocId(e.target.value)}>
+                        {initialLocations.map((loc) => <option key={loc.id} value={loc.id}>{loc.city}, {loc.country}</option>)}
+                      </select>
+                    )},
+                    { label: "Currency", node: (
+                      <select className="form-select" value={subCurrency} onChange={(e) => setSubCurrency(e.target.value)}>
+                        <option value="USD">USD — US Dollar</option>
+                        <option value="INR">INR — Indian Rupee</option>
+                        <option value="GBP">GBP — British Pound</option>
+                        <option value="EUR">EUR — Euro</option>
+                      </select>
+                    )},
+                  ].map(({ label, node }) => (
+                    <div key={label} className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">{label}</label>
+                      {node}
+                    </div>
                   ))}
-                </select>
-              </div>
 
-              {/* Roles */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Role Type</label>
-                <select
-                  className="bg-card border border-border text-sm font-semibold rounded-lg p-2.5 outline-none cursor-pointer text-foreground"
-                  value={subRoleId}
-                  onChange={(e) => setSubRoleId(e.target.value)}
-                >
-                  {initialRoles.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.roleName}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                  {/* Level / Designation */}
+                  {isDisclosed ? (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                      <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Internal Level</label>
+                      <select className="form-select" value={subLevelId} onChange={(e) => setSubLevelId(e.target.value)}>
+                        {disclosedLevels.map((l: { id: string; levelCode: string; equivalentLevel: string }) => (
+                          <option key={l.id} value={l.id}>{l.levelCode} ({l.equivalentLevel})</option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                      <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Job Title / Designation</label>
+                      <input
+                        type="text"
+                        required
+                        className="form-input"
+                        placeholder="e.g. Senior Software Engineer, Technology Lead"
+                        value={subDesignation}
+                        onChange={(e) => setSubDesignation(e.target.value)}
+                      />
+                      <span className="text-[10px] text-amber-600 font-semibold">Auto-estimated grade mapping will be applied.</span>
+                    </div>
+                  )}
 
-              {/* Conditional level code vs designation text */}
-              {isDisclosed ? (
-                <div className="flex flex-col animate-fadeIn">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Internal Disclosed Level
-                  </label>
-                  <select
-                    className="bg-card border border-border text-sm font-semibold rounded-lg p-2.5 outline-none cursor-pointer text-foreground"
-                    value={subLevelId}
-                    onChange={(e) => setSubLevelId(e.target.value)}
-                  >
-                    {disclosedLevels.map((l: { id: string; levelCode: string; equivalentLevel: string }) => (
-                      <option key={l.id} value={l.id}>
-                        {l.levelCode} ({l.equivalentLevel})
-                      </option>
+                  {/* YOE + Base */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Years Exp.</label>
+                      <input type="number" min="0" required className="form-input" value={subYoe} onChange={(e) => setSubYoe(e.target.value)} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Base Salary / yr</label>
+                      <input type="number" min="1" required className="form-input" value={subBase} onChange={(e) => setSubBase(e.target.value)} />
+                    </div>
+                  </div>
+
+                  {/* Stock + Bonus + Joining */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { label: "Stock (4yr)", val: subStock, set: setSubStock, ph: "Total grant" },
+                      { label: "Annual Bonus", val: subBonus, set: setSubBonus, ph: "Per year" },
+                      { label: "Sign-on", val: subJoining, set: setSubJoining, ph: "One-time" },
+                    ].map(({ label, val, set, ph }) => (
+                      <div key={label} className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">{label}</label>
+                        <input type="number" min="0" className="form-input" placeholder={ph} value={val} onChange={(e) => set(e.target.value)} />
+                      </div>
                     ))}
-                  </select>
-                </div>
-              ) : (
-                <div className="flex flex-col animate-fadeIn">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Job Designation Title
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground placeholder-muted/80"
-                    placeholder="e.g. Technology Lead, Senior Associate"
-                    value={subDesignation}
-                    onChange={(e) => setSubDesignation(e.target.value)}
-                  />
-                  <span className="text-[10px] text-amber-500 font-semibold mt-1">
-                    ⚠️ System will automatically estimate grade mapping with confidence metrics.
-                  </span>
-                </div>
-              )}
+                  </div>
 
-              {/* Location */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Location</label>
-                <select
-                  className="bg-card border border-border text-sm font-semibold rounded-lg p-2.5 outline-none cursor-pointer text-foreground"
-                  value={subLocId}
-                  onChange={(e) => setSubLocId(e.target.value)}
-                >
-                  {initialLocations.map((loc) => (
-                    <option key={loc.id} value={loc.id}>
-                      {loc.city}, {loc.country}
-                    </option>
-                  ))}
-                </select>
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-sm disabled:opacity-50 cursor-pointer mt-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    {isPending ? "Submitting..." : "Submit Anonymously"}
+                  </button>
+                </form>
               </div>
-
-              {/* Currency */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Currency</label>
-                <select
-                  className="bg-card border border-border text-sm font-semibold rounded-lg p-2.5 outline-none cursor-pointer text-foreground"
-                  value={subCurrency}
-                  onChange={(e) => setSubCurrency(e.target.value)}
-                >
-                  <option value="USD">USD - United States Dollar</option>
-                  <option value="INR">INR - Indian Rupee</option>
-                  <option value="GBP">GBP - British Pound</option>
-                  <option value="EUR">EUR - Euro</option>
-                </select>
-              </div>
-
-              {/* Experience and Base */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Years Experience</label>
-                  <input
-                    type="number"
-                    min="0"
-                    required
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground"
-                    value={subYoe}
-                    onChange={(e) => setSubYoe(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Base Salary / yr</label>
-                  <input
-                    type="number"
-                    min="1"
-                    required
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground"
-                    value={subBase}
-                    onChange={(e) => setSubBase(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Stock and Bonus */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="flex flex-col col-span-1">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Total Stock (4yr)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground"
-                    placeholder="Total grant"
-                    value={subStock}
-                    onChange={(e) => setSubStock(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col col-span-1">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Annual Bonus
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground"
-                    placeholder="Per year"
-                    value={subBonus}
-                    onChange={(e) => setSubBonus(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col col-span-1">
-                  <label className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Sign-on / Joining
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="bg-card border border-border text-sm rounded-lg p-2.5 outline-none text-foreground"
-                    placeholder="One-time"
-                    value={subJoining}
-                    onChange={(e) => setSubJoining(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Submit button */}
-              <button
-                type="submit"
-                disabled={isPending}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white font-bold text-sm uppercase tracking-wider p-3 rounded-lg cursor-pointer disabled:opacity-50 transition-colors mt-6"
-              >
-                <Send className="w-4 h-4" />
-                {isPending ? "Submitting..." : "Submit Compensation"}
-              </button>
-            </form>
-          </div>
-          )
-        )}
+            )
+          )}
+        </div>
       </div>
+
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </div>
   );

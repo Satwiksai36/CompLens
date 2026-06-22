@@ -226,9 +226,9 @@ export function CompanyLogo({ name, size = 40, className = "" }: CompanyLogoProp
   if (!logo) {
     // Fallback: vivid gradient with large initial letter
     const colors: [string, string][] = [
-      ["#4f46e5", "#818cf8"],
+      ["#0060b9", "#3b82f6"],
       ["#0891b2", "#67e8f9"],
-      ["#059669", "#6ee7b7"],
+      ["#19a672", "#6ee7b7"],
       ["#d97706", "#fcd34d"],
       ["#dc2626", "#f87171"],
       ["#7c3aed", "#c4b5fd"],
@@ -261,7 +261,7 @@ export function CompanyLogo({ name, size = 40, className = "" }: CompanyLogoProp
         height: size,
         background: logo.bg,
         padding: size * pad,
-        border: logo.bg === "#fff" ? "1px solid #e2e8f0" : "none",
+        border: logo.bg === "#fff" ? "1px solid #e1e5ea" : "none",
         flexShrink: 0,
       }}
     >
