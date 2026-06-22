@@ -69,7 +69,7 @@ export default function Header() {
 
           {/* Brand Logo — premium SaaS style */}
           <Link href="/" className="flex items-center gap-2.5 select-none shrink-0 group">
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/15 group-hover:shadow-primary/25 transition-all duration-300 shrink-0">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br from-primary to-accent shadow-lg shadow-primary/15 group-hover:shadow-primary/25 transition-all duration-300 shrink-0">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
                 <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
