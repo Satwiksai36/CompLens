@@ -251,17 +251,19 @@ export function CompanyLogo({ name, size = 40, className = "" }: CompanyLogoProp
     );
   }
 
+  const pngLogos = ["adobe", "amazon", "apple", "netflix"];
+  const isPng = pngLogos.includes(key);
   const pad = logo.pad ?? 0.13;
 
   return (
     <div
-      className={`flex items-center justify-center rounded-xl shadow-sm overflow-hidden ${className}`}
+      className={`flex items-center justify-center rounded-xl shadow-sm overflow-hidden bg-card ${className}`}
       style={{
         width: size,
         height: size,
-        background: logo.bg,
-        padding: size * pad,
-        border: logo.bg === "#fff" ? "1px solid #e1e5ea" : "none",
+        background: isPng ? "#fff" : logo.bg,
+        padding: isPng ? 0 : size * pad,
+        border: (logo.bg === "#fff" || isPng) ? "1px solid #e1e5ea" : "none",
         flexShrink: 0,
       }}
     >
@@ -274,7 +276,15 @@ export function CompanyLogo({ name, size = 40, className = "" }: CompanyLogoProp
           justifyContent: "center",
         }}
       >
-        {logo.svg}
+        {isPng ? (
+          <img
+            src={`/logos/${key}.png`}
+            alt={name}
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          logo.svg
+        )}
       </div>
     </div>
   );
