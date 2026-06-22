@@ -148,11 +148,11 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
         <div className="main-container">
           {/* Headline */}
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 text-[var(--foreground)]" style={{ letterSpacing: "-0.02em" }}>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 text-foreground" style={{ letterSpacing: "-0.02em" }}>
               Real Salary Data,{" "}
-              <span className="text-[var(--primary)]">No Guesswork</span>
+              <span className="text-primary">No Guesswork</span>
             </h1>
-            <p className="text-sm md:text-base text-[var(--muted)] max-w-xl mx-auto" style={{ fontWeight: 500 }}>
+            <p className="text-sm md:text-base text-muted max-w-xl mx-auto" style={{ fontWeight: 500 }}>
               Search verified compensation data across top tech companies. Know your worth.
             </p>
           </div>
@@ -165,17 +165,17 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
             >
               {/* Search field */}
               <div className="flex-1 flex items-center px-3 gap-2.5 relative">
-                <Search className="w-4 h-4 text-[var(--primary)] shrink-0" />
+                <Search className="w-4 h-4 text-primary shrink-0" />
                 <input
                   type="text"
-                  className="w-full bg-transparent text-[var(--foreground)] outline-none text-sm placeholder-[var(--muted)] py-2.5 font-semibold"
+                  className="w-full bg-transparent text-foreground outline-none text-sm placeholder-muted py-2.5 font-semibold"
                   placeholder='Search company, role, or title — e.g. "Google Software Engineer"'
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   onFocus={() => setShowSuggestions(true)}
                 />
                 {searchQuery && (
-                  <button onClick={() => handleSearchChange("")} className="text-[var(--muted)] hover:text-[var(--foreground)] cursor-pointer">
+                  <button onClick={() => handleSearchChange("")} className="text-muted hover:text-foreground cursor-pointer">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -183,7 +183,7 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
                 {showSuggestions && suggestions.length > 0 && (
                   <ul className="autocomplete-suggestions-list">
                     {!searchQuery && (
-                      <li className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                      <li className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-muted">
                         Trending
                       </li>
                     )}
@@ -202,25 +202,25 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
               </div>
 
               {/* Divider */}
-              <div className="hidden md:block w-px bg-[var(--border)] self-stretch my-1" />
+              <div className="hidden md:block w-px bg-border self-stretch my-1" />
 
               {/* Location Selector */}
               <div className="flex items-center px-3 gap-2.5 md:w-56 relative">
-                <MapPin className="w-4 h-4 text-[var(--accent)] shrink-0" />
+                <MapPin className="w-4 h-4 text-accent shrink-0" />
                 <select
-                  className="w-full bg-transparent text-[var(--foreground)] outline-none text-sm cursor-pointer py-2.5 pr-6 appearance-none font-semibold"
+                  className="w-full bg-transparent text-foreground outline-none text-sm cursor-pointer py-2.5 pr-6 appearance-none font-semibold"
                   value={selectedLocationId}
                   onChange={(e) => handleLocationChange(e.target.value)}
                   style={{ WebkitAppearance: "none" }}
                 >
-                  <option value="" className="bg-white dark:bg-[var(--card)]">All Locations</option>
+                  <option value="" className="bg-white dark:bg-card">All Locations</option>
                   {locations.map((loc) => (
-                    <option key={loc.id} value={loc.id} className="bg-white dark:bg-[var(--card)]">
+                    <option key={loc.id} value={loc.id} className="bg-white dark:bg-card">
                       {loc.city}, {loc.country}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[var(--muted)] absolute right-3 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 text-muted absolute right-3 pointer-events-none" />
               </div>
             </div>
 
@@ -237,15 +237,15 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
                   <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
                 {activeDropdown === "experience" && (
-                  <div className="absolute left-0 mt-1.5 w-52 bg-white dark:bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
-                    <button type="button" onClick={() => handleExpSelect("")} className="w-full text-left px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--card-hover)] rounded-lg flex justify-between items-center font-semibold">
+                  <div className="absolute left-0 mt-1.5 w-52 bg-white dark:bg-card border border-border rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
+                    <button type="button" onClick={() => handleExpSelect("")} className="w-full text-left px-3 py-2 text-xs text-muted hover:text-foreground hover:bg-(--card-hover) rounded-lg flex justify-between items-center font-semibold">
                       <span>All Experience</span>
-                      {experienceLevel === "" && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                      {experienceLevel === "" && <Check className="w-3.5 h-3.5 text-primary" />}
                     </button>
                     {["0-2 Years", "2-5 Years", "5-9 Years", "9-13 Years", "13-15 Years", "15+ Years"].map((band) => (
-                      <button key={band} type="button" onClick={() => handleExpSelect(band)} className="w-full text-left px-3 py-2 text-xs text-[var(--foreground)] hover:bg-[var(--card-hover)] rounded-lg flex justify-between items-center font-semibold">
+                      <button key={band} type="button" onClick={() => handleExpSelect(band)} className="w-full text-left px-3 py-2 text-xs text-foreground hover:bg-(--card-hover) rounded-lg flex justify-between items-center font-semibold">
                         <span>{band}</span>
-                        {experienceLevel === band && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                        {experienceLevel === band && <Check className="w-3.5 h-3.5 text-primary" />}
                       </button>
                     ))}
                   </div>
@@ -263,15 +263,15 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
                   <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
                 {activeDropdown === "level" && (
-                  <div className="absolute left-0 mt-1.5 w-48 bg-white dark:bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
-                    <button type="button" onClick={() => handleLevelSelect("")} className="w-full text-left px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--card-hover)] rounded-lg flex justify-between items-center font-semibold">
+                  <div className="absolute left-0 mt-1.5 w-48 bg-white dark:bg-card border border-border rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
+                    <button type="button" onClick={() => handleLevelSelect("")} className="w-full text-left px-3 py-2 text-xs text-muted hover:text-foreground hover:bg-(--card-hover) rounded-lg flex justify-between items-center font-semibold">
                       <span>All Levels</span>
-                      {equivalentLevel === "" && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                      {equivalentLevel === "" && <Check className="w-3.5 h-3.5 text-primary" />}
                     </button>
                     {["Entry", "Mid", "Senior", "Staff", "Principal", "Director+"].map((lvl) => (
-                      <button key={lvl} type="button" onClick={() => handleLevelSelect(lvl)} className="w-full text-left px-3 py-2 text-xs text-[var(--foreground)] hover:bg-[var(--card-hover)] rounded-lg flex justify-between items-center font-semibold">
+                      <button key={lvl} type="button" onClick={() => handleLevelSelect(lvl)} className="w-full text-left px-3 py-2 text-xs text-foreground hover:bg-(--card-hover) rounded-lg flex justify-between items-center font-semibold">
                         <span>{lvl}</span>
-                        {equivalentLevel === lvl && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                        {equivalentLevel === lvl && <Check className="w-3.5 h-3.5 text-primary" />}
                       </button>
                     ))}
                   </div>
@@ -289,16 +289,16 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
                   <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
                 {activeDropdown === "tier" && (
-                  <div className="absolute left-0 mt-1.5 w-56 bg-white dark:bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
+                  <div className="absolute left-0 mt-1.5 w-56 bg-white dark:bg-card border border-border rounded-xl shadow-xl z-50 p-1.5 animate-fadeIn">
                     {[
                       { val: "", label: "All Tiers" },
                       { val: "Tier 1", label: "Tier 1 — US High COL (SF, NY)" },
                       { val: "Tier 2", label: "Tier 2 — US Mid / UK / EU" },
                       { val: "Tier 3", label: "Tier 3 — Offshore / India" },
                     ].map(({ val, label }) => (
-                      <button key={val} type="button" onClick={() => handleTierSelect(val)} className={`w-full text-left px-3 py-2 text-xs hover:bg-[var(--card-hover)] rounded-lg flex justify-between items-center font-semibold ${val === "" ? "text-[var(--muted)]" : "text-[var(--foreground)]"}`}>
+                      <button key={val} type="button" onClick={() => handleTierSelect(val)} className={`w-full text-left px-3 py-2 text-xs hover:bg-(--card-hover) rounded-lg flex justify-between items-center font-semibold ${val === "" ? "text-muted" : "text-foreground"}`}>
                         <span>{label}</span>
-                        {locationTier === val && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                        {locationTier === val && <Check className="w-3.5 h-3.5 text-primary" />}
                       </button>
                     ))}
                   </div>
@@ -319,12 +319,12 @@ export const FilterHero: React.FC<FilterHeroProps> = ({
 
               {/* Spacer + popular quick-links */}
               <div className="hidden lg:flex items-center gap-1.5 ml-auto">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Quick:</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Quick:</span>
                 {["Software Engineer", "Google", "Meta", "Amazon"].map((name) => (
                   <button
                     key={name}
                     onClick={() => handleQuickSearch(name)}
-                    className="text-[11px] font-semibold text-[var(--primary)] hover:underline cursor-pointer"
+                    className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
                   >
                     {name}
                   </button>

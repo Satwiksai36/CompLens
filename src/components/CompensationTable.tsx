@@ -58,19 +58,19 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              <th className="py-3 px-4 text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border)]">
+              <th className="py-3 px-4 text-[10px] font-bold uppercase tracking-widest text-muted bg-[#f9fafb] dark:bg-[#111113] border-b border-border">
                 Company / Role
               </th>
-              <th className="py-3 px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border)] hidden md:table-cell">
+              <th className="py-3 px-3 text-[10px] font-bold uppercase tracking-widest text-muted bg-[#f9fafb] dark:bg-[#111113] border-b border-border hidden md:table-cell">
                 Level
               </th>
-              <th className="py-3 px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border)] hidden lg:table-cell">
+              <th className="py-3 px-3 text-[10px] font-bold uppercase tracking-widest text-muted bg-[#f9fafb] dark:bg-[#111113] border-b border-border hidden lg:table-cell">
                 Location
               </th>
-              <th className="py-3 px-4 text-[10px] font-bold uppercase tracking-widest text-[var(--muted)] bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border)] text-right">
+              <th className="py-3 px-4 text-[10px] font-bold uppercase tracking-widest text-muted bg-[#f9fafb] dark:bg-[#111113] border-b border-border text-right">
                 Total Comp
               </th>
-              <th className="py-3 px-3 w-10 bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border)]" />
+              <th className="py-3 px-3 w-10 bg-[#f9fafb] dark:bg-[#111113] border-b border-border" />
             </tr>
           </thead>
           <tbody>
@@ -78,11 +78,11 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
               <tr>
                 <td colSpan={5} className="py-16 text-center">
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-[var(--primary-faded)] flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-[var(--primary)]" />
+                    <div className="w-12 h-12 rounded-full bg-(--primary-faded) flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-primary" />
                     </div>
-                    <p className="text-sm font-semibold text-[var(--muted)]">No salary records match your search</p>
-                    <p className="text-xs text-[var(--muted)]">Try adjusting your filters or clearing the search</p>
+                    <p className="text-sm font-semibold text-muted">No salary records match your search</p>
+                    <p className="text-xs text-muted">Try adjusting your filters or clearing the search</p>
                   </div>
                 </td>
               </tr>
@@ -102,7 +102,7 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                     {/* Main Row */}
                     <tr
                       onClick={() => toggleRow(dp.id)}
-                      className="cursor-pointer transition-colors duration-100 border-b border-[var(--border-light)] last:border-0 hover:bg-[#f6f8fc] dark:hover:bg-[var(--card-hover)]"
+                      className="cursor-pointer transition-colors duration-100 border-b border-(--border-light) last:border-0 hover:bg-[#f6f8fc] dark:hover:bg-(--card-hover)"
                     >
                       {/* Company / Role */}
                       <td className="py-3.5 px-4">
@@ -110,7 +110,7 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                           <CompanyLogo name={dp.companyName} size={36} className="shrink-0" />
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-[var(--foreground)]">{dp.companyName}</span>
+                              <span className="font-bold text-sm text-foreground">{dp.companyName}</span>
                               {dp.mappingType === "disclosed" ? (
                                 <span className="level-badge disclosed">Disclosed</span>
                               ) : (
@@ -119,7 +119,7 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-[var(--muted)] mt-0.5 font-medium">
+                            <div className="text-xs text-muted mt-0.5 font-medium">
                               {dp.roleName}
                               <span className="mx-1 opacity-40">·</span>
                               <span>{dp.yearsExperience} yrs exp</span>
@@ -130,22 +130,22 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
 
                       {/* Level */}
                       <td className="py-3.5 px-3 hidden md:table-cell">
-                        <div className="font-bold text-sm text-[var(--foreground)]">{dp.levelCode}</div>
-                        <div className="text-xs text-[var(--primary)] font-semibold">{dp.equivalentLevel}</div>
+                        <div className="font-bold text-sm text-foreground">{dp.levelCode}</div>
+                        <div className="text-xs text-primary font-semibold">{dp.equivalentLevel}</div>
                       </td>
 
                       {/* Location */}
                       <td className="py-3.5 px-3 hidden lg:table-cell">
-                        <div className="text-sm font-semibold text-[var(--foreground-secondary)]">{dp.locationCity}</div>
-                        <div className="text-xs text-[var(--muted)]">{dp.locationCountry}</div>
+                        <div className="text-sm font-semibold text-(--foreground-secondary)">{dp.locationCity}</div>
+                        <div className="text-xs text-muted">{dp.locationCountry}</div>
                       </td>
 
                       {/* Total Comp */}
                       <td className="py-3.5 px-4 text-right">
-                        <div className="font-black text-sm text-[var(--accent)]">
-                          <CurrencyDisplay value={dp.totalCompensation} currency={dp.currency} className="font-black text-[var(--accent)]" />
+                        <div className="font-black text-sm text-accent">
+                          <CurrencyDisplay value={dp.totalCompensation} currency={dp.currency} className="font-black text-accent" />
                         </div>
-                        <div className="text-[10px] text-[var(--muted)] mt-0.5 font-medium whitespace-nowrap hidden sm:block">
+                        <div className="text-[10px] text-muted mt-0.5 font-medium whitespace-nowrap hidden sm:block">
                           {formatMoney(dp.baseSalary, dp.currency)} +{" "}
                           {formatMoney(annualStock, dp.currency)} +{" "}
                           {formatMoney(annualBonus, dp.currency)}
@@ -155,26 +155,26 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                       {/* Expand chevron */}
                       <td className="py-3.5 px-3 text-center">
                         <ChevronDown
-                          className={`w-4 h-4 text-[var(--muted)] transition-transform duration-200 ${isExpanded ? "rotate-180 text-[var(--primary)]" : ""}`}
+                          className={`w-4 h-4 text-muted transition-transform duration-200 ${isExpanded ? "rotate-180 text-primary" : ""}`}
                         />
                       </td>
                     </tr>
 
                     {/* Expanded Details Row */}
                     {isExpanded && (
-                      <tr className="bg-[#f9fafb] dark:bg-[#111113] border-b border-[var(--border-light)]">
+                      <tr className="bg-[#f9fafb] dark:bg-[#111113] border-b border-(--border-light)">
                         <td colSpan={5} className="px-4 py-4">
                           <div className="max-w-3xl flex flex-col gap-4">
 
                             {/* Compensation Breakdown Bar */}
                             <div>
-                              <div className="flex flex-wrap gap-x-5 gap-y-1 text-[10px] font-bold text-[var(--muted)] mb-2">
+                              <div className="flex flex-wrap gap-x-5 gap-y-1 text-[10px] font-bold text-muted mb-2">
                                 <span className="flex items-center gap-1.5">
-                                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--primary)] inline-block" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-primary inline-block" />
                                   Base {Math.round(basePct)}% — {formatMoney(dp.baseSalary, dp.currency)}
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] inline-block" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-accent inline-block" />
                                   Stock/yr {Math.round(stockPct)}% — {formatMoney(annualStock, dp.currency)}
                                 </span>
                                 <span className="flex items-center gap-1.5">
@@ -183,22 +183,22 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                                 </span>
                               </div>
                               <div className="comp-bar">
-                                <div className="h-full bg-[var(--primary)] transition-all duration-300" style={{ width: `${basePct}%` }} title={`Base: ${formatMoney(dp.baseSalary, dp.currency)}`} />
-                                <div className="h-full bg-[var(--accent)] transition-all duration-300" style={{ width: `${stockPct}%` }} title={`Stock/yr: ${formatMoney(annualStock, dp.currency)}`} />
+                                <div className="h-full bg-primary transition-all duration-300" style={{ width: `${basePct}%` }} title={`Base: ${formatMoney(dp.baseSalary, dp.currency)}`} />
+                                <div className="h-full bg-accent transition-all duration-300" style={{ width: `${stockPct}%` }} title={`Stock/yr: ${formatMoney(annualStock, dp.currency)}`} />
                                 <div className="h-full bg-amber-500 transition-all duration-300" style={{ width: `${bonusPct}%` }} title={`Bonus: ${formatMoney(annualBonus, dp.currency)}`} />
                               </div>
                             </div>
 
                             {/* Employer Ratings + Tags */}
-                            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border-light)]">
+                            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-(--border-light)">
                               <div className="flex items-center gap-2.5 flex-wrap">
-                                <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wide flex items-center gap-1">
-                                  <TrendingUp className="w-3 h-3 text-[var(--primary)]" />
+                                <span className="text-[10px] font-bold text-muted uppercase tracking-wide flex items-center gap-1">
+                                  <TrendingUp className="w-3 h-3 text-primary" />
                                   Employer Rating
                                 </span>
                                 <StarRating value={rating.rating} />
-                                <span className="text-xs font-black text-[var(--foreground)]">{rating.rating}/5</span>
-                                <span className="text-[10px] text-[var(--muted)]">(AmbitionBox)</span>
+                                <span className="text-xs font-black text-foreground">{rating.rating}/5</span>
+                                <span className="text-[10px] text-muted">(AmbitionBox)</span>
                               </div>
                               <div className="flex flex-wrap gap-1.5">
                                 {rating.pros.slice(0, 2).map((p, i) => (
