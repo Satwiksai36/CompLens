@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ChevronDown, Check, TrendingUp } from "lucide-react";
 import { DatapointDetail } from "../types";
 import { CurrencyDisplay } from "./CurrencyDisplay";
+import { CompanyLogo } from "./CompanyLogo";
 
 export interface CompensationTableProps {
   datapoints: Array<DatapointDetail & { companyName: string; roleName: string }>;
@@ -182,9 +183,7 @@ export const CompensationTable: React.FC<CompensationTableProps> = ({ datapoints
                     >
                       <td className="py-4.5 px-6">
                         <div className="flex items-center gap-3">
-                          <div className={`company-logo-badge ${getCompanyLogoClass(dp.companyName)} shrink-0 w-10 h-10 text-base shadow-sm`}>
-                            {dp.companyName.charAt(0).toUpperCase()}
-                          </div>
+                          <CompanyLogo name={dp.companyName} size={40} />
                           <div>
                             <div className="font-bold text-foreground flex items-center gap-2 text-sm md:text-base font-display">
                               {dp.companyName}

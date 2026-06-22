@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Search, ChevronRight, Landmark } from "lucide-react";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
+import { CompanyLogo } from "@/components/CompanyLogo";
 
 export interface CompanyCardInfo {
   id: string;
@@ -68,9 +69,7 @@ export default function CompaniesClient({ companies }: CompaniesClientProps) {
             >
               <div>
                 <div className="flex items-center gap-4 mb-4">
-                  <div className={`company-logo-badge ${getCompanyLogoClass(c.name)} w-12 h-12 text-lg shadow-sm shrink-0`}>
-                    {c.name.charAt(0).toUpperCase()}
-                  </div>
+                  <CompanyLogo name={c.name} size={48} className="shrink-0" />
                   <div>
                     <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
                       {c.name}

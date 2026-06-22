@@ -79,10 +79,25 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-2xl font-black tracking-tight font-display bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
-              Comp<span className="text-foreground dark:text-white font-semibold">Lens</span>
-            </span>
+          <Link href="/" className="flex items-center gap-2.5 group select-none">
+            {/* Logo Icon Mark — stylized lens/chart */}
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all duration-300 group-hover:scale-105 shrink-0">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Rising bar chart icon */}
+                <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
+                <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
+                <rect x="11" y="4" width="3" height="13" rx="1" fill="white"/>
+                {/* Trend line */}
+                <path d="M2.5 10.5L7.5 6.5L12.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6"/>
+                {/* Small dot at top */}
+                <circle cx="14.5" cy="3" r="1.5" fill="#a5b4fc"/>
+              </svg>
+            </div>
+            {/* Wordmark */}
+            <div className="flex items-baseline gap-0">
+              <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white leading-none">Comp</span>
+              <span className="text-xl font-black tracking-tight text-indigo-600 dark:text-indigo-400 leading-none">Lens</span>
+            </div>
           </Link>
           {/* Desktop Nav links */}
           <nav className="hidden md:flex items-center gap-8 h-16">

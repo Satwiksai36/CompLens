@@ -6,6 +6,7 @@ import { getComparison } from "../actions/compensation.actions";
 import { CompanyCompSummary, DatapointDetail } from "../types";
 import { Scale, ArrowRight, ArrowUpRight, TrendingDown, HelpCircle } from "lucide-react";
 import { CurrencyDisplay } from "./CurrencyDisplay";
+import { CompanyLogo } from "./CompanyLogo";
 
 export interface ComparisonWorkspaceProps {
   companies: Company[];
@@ -232,9 +233,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
           <div>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className={`company-logo-badge ${getCompanyLogoClass(companies.find(c => c.id === compAId)?.name || "")} w-12 h-12 text-lg shadow`}>
-                  {(companies.find(c => c.id === compAId)?.name || "A").charAt(0).toUpperCase()}
-                </div>
+                <CompanyLogo name={companies.find(c => c.id === compAId)?.name || ""} size={48} />
                 <div>
                   <h3 className="font-extrabold text-lg text-foreground">
                     {companies.find((c) => c.id === compAId)?.name}
@@ -311,9 +310,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
           <div>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className={`company-logo-badge ${getCompanyLogoClass(companies.find(c => c.id === compBId)?.name || "")} w-12 h-12 text-lg shadow`}>
-                  {(companies.find(c => c.id === compBId)?.name || "B").charAt(0).toUpperCase()}
-                </div>
+                <CompanyLogo name={companies.find(c => c.id === compBId)?.name || ""} size={48} />
                 <div>
                   <h3 className="font-extrabold text-lg text-foreground">
                     {companies.find((c) => c.id === compBId)?.name}

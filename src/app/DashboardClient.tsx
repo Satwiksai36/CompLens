@@ -11,6 +11,7 @@ import { submitCompensation } from "@/actions/compensation.actions";
 import { DollarSign, Landmark, Briefcase, MapPin, Send, AlertCircle, CheckCircle2, Lock, ArrowRight } from "lucide-react";
 import { CurrencyDisplay } from "@/components/CurrencyDisplay";
 import AuthModal from "@/components/AuthModal";
+import { CompanyLogo } from "@/components/CompanyLogo";
 
 export interface DashboardClientProps {
   initialCompanies: Array<Company & { levels: Level[] }>;
@@ -394,9 +395,7 @@ export default function DashboardClient({
                       className="flex items-center justify-between p-2 rounded-xl hover:bg-card-hover/40 transition-colors border border-transparent hover:border-border/30"
                     >
                       <div className="flex items-center gap-3">
-                        <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-xs text-white shrink-0 ${item.logo}`}>
-                          {item.name[0]}
-                        </span>
+                        <CompanyLogo name={item.name} size={32} className="shrink-0" />
                         <div>
                           <p className="text-xs font-bold text-foreground">{item.name}</p>
                           <p className="text-[10px] text-muted">Median Annual Pay</p>

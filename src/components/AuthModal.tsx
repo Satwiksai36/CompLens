@@ -93,14 +93,27 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
           {/* Branding */}
           <div className="text-center mb-7">
-            <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-              CompLens
-            </span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-              {activeTab === "signin"
-                ? "Welcome back! Sign in to access compensation intelligence."
-                : "Join thousands of professionals sharing verified salary data."}
-            </p>
+            {/* Branding — matches Header logo */}
+          <div className="flex items-center justify-center gap-2.5">
+            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/25 shrink-0">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
+                <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
+                <rect x="11" y="4" width="3" height="13" rx="1" fill="white"/>
+                <path d="M2.5 10.5L7.5 6.5L12.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6"/>
+                <circle cx="14.5" cy="3" r="1.5" fill="#a5b4fc"/>
+              </svg>
+            </div>
+            <div className="flex items-baseline gap-0">
+              <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white leading-none">Comp</span>
+              <span className="text-xl font-black tracking-tight text-indigo-600 dark:text-indigo-400 leading-none">Lens</span>
+            </div>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+            {activeTab === "signin"
+              ? "Welcome back! Sign in to access compensation intelligence."
+              : "Join thousands of professionals sharing verified salary data."}
+          </p>
           </div>
 
           {/* Tab Switcher */}

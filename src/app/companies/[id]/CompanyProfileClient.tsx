@@ -4,6 +4,7 @@ import React from "react";
 import { Company, Level, Role, Location } from "@prisma/client";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts";
 import { CompensationTable } from "@/components/CompensationTable";
+import { CompanyLogo } from "@/components/CompanyLogo";
 import { TrendingUp, PieChart as LucidePieChart, Award, ThumbsUp, ThumbsDown } from "lucide-react";
 
 export interface CompanyProfileClientProps {
@@ -178,9 +179,7 @@ export default function CompanyProfileClient({
       {/* Profile Header */}
       <div className="bg-card/60 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <div className={`company-logo-badge ${getCompanyLogoClass(company.name)} w-16 h-16 text-2xl shadow shrink-0`}>
-            {company.name.charAt(0).toUpperCase()}
-          </div>
+          <CompanyLogo name={company.name} size={64} className="shrink-0" />
           <div>
             <h1 className="text-3xl font-extrabold text-foreground font-display tracking-tight">{company.name}</h1>
             <span className="text-sm text-muted font-semibold block mt-0.5">{company.industry} Profile</span>
