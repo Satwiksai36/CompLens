@@ -226,7 +226,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         <div
           className={`border rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all ${
             winner === "A"
-              ? "border-primary bg-primary/[0.01]"
+              ? "border-primary bg-primary/1"
               : "border-border bg-card"
           }`}
         >
@@ -303,7 +303,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         <div
           className={`border rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-all ${
             winner === "B"
-              ? "border-primary bg-primary/[0.01]"
+              ? "border-primary bg-primary/1"
               : "border-border bg-card"
           }`}
         >

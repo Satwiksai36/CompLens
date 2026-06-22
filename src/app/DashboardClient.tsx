@@ -189,8 +189,8 @@ export default function DashboardClient({
 
   // Find if selected company has a disclosed framework
   const selectedComp = initialCompanies.find((c) => c.id === subCompId);
-  const isDisclosed = selectedComp?.levels.some((l) => l.mappingType === "disclosed") ?? false;
-  const disclosedLevels = selectedComp?.levels.filter((l) => l.mappingType === "disclosed") || [];
+  const isDisclosed = selectedComp?.levels.some((l: { mappingType: string }) => l.mappingType === "disclosed") ?? false;
+  const disclosedLevels = selectedComp?.levels.filter((l: { mappingType: string }) => l.mappingType === "disclosed") || [];
 
   // Update default subLevelId on company toggle
   React.useEffect(() => {
@@ -611,7 +611,7 @@ export default function DashboardClient({
                     value={subLevelId}
                     onChange={(e) => setSubLevelId(e.target.value)}
                   >
-                    {disclosedLevels.map((l) => (
+                    {disclosedLevels.map((l: { id: string; levelCode: string; equivalentLevel: string }) => (
                       <option key={l.id} value={l.id}>
                         {l.levelCode} ({l.equivalentLevel})
                       </option>

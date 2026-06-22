@@ -81,7 +81,7 @@ export default function Header() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5 group select-none">
             {/* Logo Icon Mark — stylized lens/chart */}
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all duration-300 group-hover:scale-105 shrink-0">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all duration-300 group-hover:scale-105 shrink-0">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 {/* Rising bar chart icon */}
                 <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
@@ -115,7 +115,7 @@ export default function Header() {
                 >
                   {link.name}
                   {isActive && (
-                    <span className="absolute bottom-[-18px] left-0 right-0 h-[2.5px] bg-gradient-to-r from-primary to-accent rounded-full shadow-[0_0_12px_rgba(99,102,241,0.6)] animate-fadeIn" />
+                    <span className="absolute bottom-[-18px] left-0 right-0 h-[2.5px] bg-linear-to-r from-primary to-accent rounded-full shadow-[0_0_12px_rgba(99,102,241,0.6)] animate-fadeIn" />
                   )}
                 </Link>
               );
@@ -141,7 +141,7 @@ export default function Header() {
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="flex items-center gap-2 p-1.5 pl-2.5 pr-2 rounded-full border border-border hover:border-primary/30 hover:bg-card-hover cursor-pointer transition-all duration-200"
               >
-                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-xs font-black">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-linear-to-r from-indigo-500 to-cyan-500 text-white text-xs font-black">
                   {getInitials()}
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-muted" />

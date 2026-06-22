@@ -92,7 +92,7 @@ export function CompanyLogo({ name, size = 40, className = "" }: CompanyLogoProp
     // Fallback: colored gradient with initials
     return (
       <div
-        className={`flex items-center justify-center rounded-xl font-black text-white bg-gradient-to-br from-indigo-500 to-cyan-500 shadow-sm ${className}`}
+        className={`flex items-center justify-center rounded-xl font-black text-white bg-linear-to-br from-indigo-500 to-cyan-500 shadow-sm ${className}`}
         style={{ width: size, height: size, fontSize: size * 0.4 }}
       >
         {name.charAt(0).toUpperCase()}
