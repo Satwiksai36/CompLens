@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // To switch to PostgreSQL in production, change "sqlite" to "postgresql"
+  // and configure DATABASE_URL in your .env file.
+  provider = "sqlite"
+}
+
+model Company {
+  id                  String               @id @default(uuid())
+  name                String               @unique
+  logo                String?              // URL or class name/ident
+  industry            String
+  levels              Level[]
+  compensationRecords CompensationRecord[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model Role {
+  id                  String               @id @default(uuid())
+  roleName            String               @unique
+  category            String               // e.g. Software Engineering, Product Management, Data Science, DevOps, Security, Design
+  compensationRecords CompensationRecord[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model Level {
+  id                  String               @id @default(uuid())
+  companyId           String
+  company             Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  levelCode           String               // e.g. L3, E4, SDE II
+  equivalentLevel     String               // e.g. Entry, Mid, Senior, Staff, Principal, Director+
+  description         String?
+  confidenceScore     Float                @default(1.0) // For heuristic estimations
+  mappingType         String               @default("disclosed") // "disclosed" | "estimated"
+  compensationRecords CompensationRecord[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@unique([companyId, levelCode])
+}
+
+model Location {
+  id                  String               @id @default(uuid())
+  city                String
+  country             String
+  region              String?              // e.g. APJ, EMEA, AMER
+  costOfLivingIndex   Float                // Baseline (SF) is 100.0
+  compensationRecords CompensationRecord[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@unique([city, country])
+}
+
+model CompensationRecord {
+  id                String   @id @default(uuid())
+  companyId         String
+  company           Company  @relation(fields: [companyId], references: [id])
+  roleId            String
+  role              Role     @relation(fields: [roleId], references: [id])
+  levelId           String
+  level             Level    @relation(fields: [levelId], references: [id])
+  locationId        String
+  location          Location @relation(fields: [locationId], references: [id])
+  yearsExperience   Int
+  baseSalary        Float
+  stockGrant        Float    // Total value over vesting period
+  bonus             Float
+  joiningBonus      Float    // One-time signup bonus
+  totalCompensation Float    // Annualized total compensation = baseSalary + (stockGrant / 4) + bonus
+  currency          String   // e.g. USD, INR, GBP, EUR
+  submittedAt       DateTime @default(now())
+  verificationStatus String  @default("PENDING") // PENDING | VERIFIED | REJECTED
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  role                String               @default("USER") // USER | ADMIN
+  compensationRecords CompensationRecord[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}

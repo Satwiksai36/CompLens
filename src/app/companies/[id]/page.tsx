@@ -1,0 +1,109 @@
+import { prisma } from "@/lib/db";
+import { notFound } from "next/navigation";
+import CompanyProfileClient from "./CompanyProfileClient";
+
+export const revalidate = 0;
+
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function CompanyProfilePage({ params }: PageProps) {
+  const { id } = await params;
+
+  const company = await prisma.company.findUnique({
+    where: { id },
+    include: {
+      levels: true,
+      compensationRecords: {
+        where: { verificationStatus: "VERIFIED" },
+        include: {
+          role: true,
+          location: true,
+          level: true,
+        },
+        orderBy: { submittedAt: "desc" },
+      },
+    },
+  });
+
+  if (!company) {
+    notFound();
+  }
+
+  // Normalize currency to USD for charts
+  const processedRecords = company.compensationRecords.map((r) => {
+    const rates: Record<string, number> = {
+      USD: 1.0,
+      INR: 0.012,
+      GBP: 1.25,
+      EUR: 1.08,
+    };
+    const rateToUSD = rates[r.currency.toUpperCase()] || 1.0;
+    
+    return {
+      ...r,
+      totalUSD: r.totalCompensation * rateToUSD,
+      baseUSD: r.baseSalary * rateToUSD,
+      stockUSD: r.stockGrant * rateToUSD,
+      bonusUSD: r.bonus * rateToUSD,
+    };
+  });
+
+  // Calculate role distributions
+  const roleCountsMap: Record<string, number> = {};
+  processedRecords.forEach((r) => {
+    const roleName = r.role.roleName;
+    roleCountsMap[roleName] = (roleCountsMap[roleName] || 0) + 1;
+  });
+  const roleDistribution = Object.entries(roleCountsMap).map(([name, count]) => ({
+    name,
+    count,
+  }));
+
+  // Calculate level hierarchy statistics
+  const levelStatsMap: Record<string, { code: string; equiv: string; totalComps: number[] }> = {};
+  
+  // Seed with company's disclosed levels to make sure we show the empty ones too
+  company.levels.forEach((lvl) => {
+    levelStatsMap[lvl.id] = {
+      code: lvl.levelCode,
+      equiv: lvl.equivalentLevel,
+      totalComps: [],
+    };
+  });
+
+  processedRecords.forEach((r) => {
+    if (levelStatsMap[r.levelId]) {
+      levelStatsMap[r.levelId].totalComps.push(r.totalUSD);
+    }
+  });
+
+  const levelHierarchy = Object.values(levelStatsMap)
+    .map((lvl) => {
+      lvl.totalComps.sort((a, b) => a - b);
+      const count = lvl.totalComps.length;
+      let medianPay = 0;
+      if (count > 0) {
+        const mid = Math.floor(count / 2);
+        medianPay = count % 2 !== 0 ? lvl.totalComps[mid] : (lvl.totalComps[mid - 1] + lvl.totalComps[mid]) / 2;
+      }
+      return {
+        code: lvl.code,
+        equiv: lvl.equiv,
+        medianPay,
+        count,
+      };
+    })
+    .filter((lvl) => lvl.count > 0 || lvl.medianPay > 0) // filter out completely empty ones if they have no pay data
+    .sort((a, b) => a.medianPay - b.medianPay);
+
+  return (
+    <CompanyProfileClient
+      company={company}
+      roleDistribution={roleDistribution}
+      levelHierarchy={levelHierarchy}
+      records={processedRecords}
+    />
+  );
+}
