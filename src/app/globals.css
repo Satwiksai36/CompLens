@@ -33,44 +33,29 @@
   --font-mono: var(--font-nunito);
 }
 
-.dark {
-  /* Premium Space Theme (Dark) */
-  --background: #0a0e17;
-  --page-bg-gradient-start: #07090f;
-  --page-bg-gradient-end: #0c0f1a;
-  --card: #121824;
-  --card-hover: #172030;
-  --border: #1e293b;
-  --border-light: #1f2937;
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-deep: #3730a3;
-  --primary-faint: #0f172a;
-  --primary-faded: #1e1b4b;
-  --accent: #34d399;
-  --accent-faded: #064e3b;
-  --foreground: #f8fafc;
-  --foreground-secondary: #cbd5e1;
-  --muted: #64748b;
-  --muted-medium: #94a3b8;
-  --card-foreground: #f8fafc;
-  --ring: rgba(99, 102, 241, 0.2);
-  --success: #34d399;
-  --success-faded: #064e3b;
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --danger-faded: #450a0a;
-}
 
 @theme inline {
   --color-background: var(--background);
   --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
   --color-border: var(--border);
+  --color-border-light: var(--border-light);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-faint: var(--primary-faint);
+  --color-primary-faded: var(--primary-faded);
   --color-accent: var(--accent);
+  --color-accent-faded: var(--accent-faded);
   --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
   --color-muted: var(--muted);
+  --color-muted-medium: var(--muted-medium);
   --color-card-foreground: var(--card-foreground);
+  --color-success: var(--success);
+  --color-success-faded: var(--success-faded);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-danger-faded: var(--danger-faded);
 }
 
 /* ===== BASE STYLES ===== */

@@ -149,7 +149,7 @@ export default function RolesClient({ roles, records }: RolesClientProps) {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4.5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-200 ${
+            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-200 ${
               activeCategory === cat
                 ? "bg-primary text-white shadow-[0_4px_12px_rgba(99,102,241,0.35)] scale-105"
                 : "bg-card border border-border text-muted hover:text-foreground hover:border-primary/30"

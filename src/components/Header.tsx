@@ -9,7 +9,6 @@ import AuthModal from "./AuthModal";
 
 export default function Header() {
   const pathname = usePathname();
-  const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = useState<{ id: string; email: string; name: string | null; role: string } | null>(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -39,31 +38,11 @@ export default function Header() {
     return user.email.substring(0, 2).toUpperCase();
   };
 
-  // Initialize theme from localStorage or system preference
+  // Force light mode theme
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
   }, []);
-
-  const toggleTheme = () => {
-    if (darkMode) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      setDarkMode(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      setDarkMode(true);
-    }
-  };
 
   // Primary nav links (top bar)
   const primaryLinks = [
@@ -85,7 +64,7 @@ export default function Header() {
   return (
     <>
       {/* ── Primary Nav Bar ── */}
-      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-white/70 dark:bg-[#0a0e17]/70 backdrop-blur-lg transition-all duration-200">
+      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-white/75 backdrop-blur-lg transition-all duration-200">
         <div className="mx-auto flex h-[58px] max-w-[1200px] items-center px-4 sm:px-6" style={{ gap: "1.5rem" }}>
 
           {/* Brand Logo — premium SaaS style */}
@@ -104,40 +83,13 @@ export default function Header() {
               <span className="text-xl font-extrabold tracking-tight text-primary leading-none">Lens</span>
             </div>
           </Link>
-
-          {/* Search bar — modern minimal omnisearch style */}
-          <div className="flex-1 hidden md:flex items-center mx-4 max-w-xs relative">
-            <Search className="absolute left-3 w-4 h-4 text-muted pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search companies, roles..."
-              className="w-full h-9 pl-9 pr-3 text-sm bg-slate-100 dark:bg-slate-900 border border-transparent rounded-xl text-foreground placeholder-muted outline-none focus:bg-white dark:focus:bg-card focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all duration-200"
-              style={{ fontFamily: "var(--font-sans)", fontWeight: 500 }}
-            />
-          </div>
-
-          {/* Spacer */}
-          <div className="flex-1 hidden md:block" />
-
           {/* Right-side controls */}
           <div className="flex items-center gap-3 ml-auto">
-            {/* Theme toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer transition-all duration-150"
-              aria-label="Toggle theme"
-            >
-              {darkMode
-                ? <Sun className="w-4.5 h-4.5 text-amber-400" />
-                : <Moon className="w-4.5 h-4.5" />}
-            </button>
-
-            {/* Auth section */}
             {user ? (
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl border border-border/80 hover:border-primary/30 hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-all duration-150 shadow-sm"
+                  className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl border border-border/80 hover:border-primary/30 hover:bg-slate-50 cursor-pointer transition-all duration-150 shadow-sm"
                 >
                   <div className="flex items-center justify-center w-6.5 h-6.5 rounded-lg bg-linear-to-r from-primary to-accent text-white text-[10px] font-black shadow-inner">
                     {getInitials()}
@@ -159,7 +111,7 @@ export default function Header() {
                           <Link
                             href="/admin"
                             onClick={() => setShowDropdown(false)}
-                            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted hover:text-foreground rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted hover:text-foreground rounded-lg hover:bg-slate-100 transition-colors"
                           >
                             <Database className="w-3.5 h-3.5 text-primary" />
                             Admin Console
@@ -167,7 +119,7 @@ export default function Header() {
                         )}
                         <button
                           onClick={handleSignOut}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-red-500 hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors text-left cursor-pointer"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-red-500 hover:text-red-400 rounded-lg hover:bg-red-50 transition-colors text-left cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5" />
                           Sign Out
@@ -178,28 +130,20 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="text-xs font-bold text-foreground hover:text-primary px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-900 transition-all cursor-pointer"
-                >
-                  Log in
-                </button>
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 cursor-pointer"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  Sign Up
-                </button>
-              </div>
+              <button
+                onClick={() => setIsAuthOpen(true)}
+                className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                Sign Up
+              </button>
             )}
           </div>
         </div>
       </header>
 
       {/* ── Secondary Sub-Nav ── */}
-      <div className="border-b border-border/30 bg-white/40 dark:bg-[#0a0e17]/40 backdrop-blur-md sticky top-[58px] z-30 transition-all duration-200">
+      <div className="border-b border-border/30 bg-white/50 backdrop-blur-md sticky top-[58px] z-30 transition-all duration-200">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <nav className="flex items-center gap-1 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
             {subNavLinks.map((link) => {

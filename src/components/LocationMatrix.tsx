@@ -140,29 +140,29 @@ export const LocationMatrix: React.FC<LocationMatrixProps> = ({ locations, recor
               return (
                 <tr key={city.id} className="hover:bg-card-hover/20 transition-colors duration-150">
                   {/* City Name */}
-                  <td className="py-4.5 px-4 font-bold text-foreground flex items-center gap-2 font-display">
+                  <td className="py-4 px-4 font-bold text-foreground flex items-center gap-2 font-display">
                     <span className="text-muted/50 text-xs w-4">#{idx + 1}</span>
                     {city.city}
                     <span className="text-[10px] text-muted font-bold font-mono">({city.country})</span>
                   </td>
 
                   {/* Median Salary */}
-                  <td className="py-4.5 px-4 text-right font-bold text-sm">
+                  <td className="py-4 px-4 text-right font-bold text-sm">
                     <CurrencyDisplay value={city.median} currency="INR" />
                   </td>
 
                   {/* COL Index */}
-                  <td className="py-4.5 px-4 text-center font-mono font-bold text-foreground/80">
+                  <td className="py-4 px-4 text-center font-mono font-bold text-foreground/80">
                     {city.colIndex.toFixed(1)}
                   </td>
 
                   {/* Adjusted score */}
-                  <td className="py-4.5 px-4 text-right font-black">
+                  <td className="py-4 px-4 text-right font-black">
                     <CurrencyDisplay value={city.adjustedScore} currency="INR" className="text-primary font-black" />
                   </td>
 
                   {/* Premium */}
-                  <td className="py-4.5 px-4 text-right font-semibold">
+                  <td className="py-4 px-4 text-right font-semibold">
                     <span
                       className={`inline-flex items-center gap-0.5 text-xs px-2.5 py-1 rounded-full font-bold font-mono ${
                         isPositive

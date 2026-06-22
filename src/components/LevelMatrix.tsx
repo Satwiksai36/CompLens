@@ -94,7 +94,7 @@ export const LevelMatrix: React.FC<LevelMatrixProps> = ({ companies }) => {
               return (
                 <tr key={equiv} className="hover:bg-card-hover/20 transition-colors duration-150">
                   {/* Standardized Level label */}
-                  <td className="py-5 px-4 vertical-align-top">
+                  <td className="py-5 px-4 align-top">
                     <span className="inline-block text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-black tracking-wide font-display">
                       {equiv}
                     </span>

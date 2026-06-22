@@ -107,21 +107,23 @@ export default async function InsightsPage() {
     .slice(0, 6);
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <div className="border-b border-border pb-4">
-        <h1 className="text-3xl font-extrabold tracking-tight text-foreground font-display">
-          Compensation <span className="text-primary font-black">Insights & Analytics</span>
-        </h1>
-        <p className="text-muted text-sm mt-1 font-semibold">
-          Visual dashboards comparing wage trends, role concentrations, and geographic buying-power indexing.
-        </p>
+    <div className="page-home min-h-screen pb-16">
+      <div className="main-container py-8 animate-fadeIn">
+        <div className="border-b border-border/80 pb-4 mb-6">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground font-display">
+            Compensation <span className="text-gradient-primary">Insights & Analytics</span>
+          </h1>
+          <p className="text-muted text-sm mt-1.5 font-semibold">
+            Visual dashboards comparing wage trends, role concentrations, and geographic buying-power indexing.
+          </p>
+        </div>
+        <DashboardCharts
+          companyData={companyData}
+          trendData={trendData}
+          roleData={roleData}
+          locationData={locationData}
+        />
       </div>
-      <DashboardCharts
-        companyData={companyData}
-        trendData={trendData}
-        roleData={roleData}
-        locationData={locationData}
-      />
     </div>
   );
 }
