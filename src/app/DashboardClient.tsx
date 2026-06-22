@@ -199,7 +199,7 @@ export default function DashboardClient({
   ] as const;
 
   return (
-    <div className="page-home">
+    <div className="page-home pb-16">
       {/* ── Hero / Search ── */}
       <FilterHero
         locations={initialLocations}
@@ -209,58 +209,58 @@ export default function DashboardClient({
       />
 
       {/* ── Main Content Area ── */}
-      <div className="main-container py-6">
+      <div className="main-container py-4">
 
         {/* ── Stats Bar ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          <div className="stat-card flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-(--primary-faded) flex items-center justify-center shrink-0">
-              <Landmark className="w-4 h-4 text-primary" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-4 flex items-center gap-4 hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Landmark className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <div className="text-xl font-black text-foreground">{totalCompanies}</div>
-              <div className="text-[10px] font-semibold text-muted uppercase tracking-wide">Companies</div>
+              <div className="text-2xl font-black text-foreground tracking-tight leading-none mb-1">{totalCompanies}</div>
+              <div className="text-[10px] font-bold text-muted uppercase tracking-wider">Companies</div>
             </div>
           </div>
-          <div className="stat-card flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#e8f6f1] dark:bg-(--accent-faded) flex items-center justify-center shrink-0">
-              <Briefcase className="w-4 h-4 text-accent" />
+          <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-4 flex items-center gap-4 hover:border-accent/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5">
+            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <Briefcase className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <div className="text-xl font-black text-foreground">{totalRoles}</div>
-              <div className="text-[10px] font-semibold text-muted uppercase tracking-wide">Roles</div>
+              <div className="text-2xl font-black text-foreground tracking-tight leading-none mb-1">{totalRoles}</div>
+              <div className="text-[10px] font-bold text-muted uppercase tracking-wider">Roles</div>
             </div>
           </div>
-          <div className="stat-card flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#fef3c7] dark:bg-[#3b2f00] flex items-center justify-center shrink-0">
-              <BarChart2 className="w-4 h-4 text-amber-600" />
+          <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-4 flex items-center gap-4 hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+              <BarChart2 className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <div className="text-xl font-black text-foreground">{verifiedRecords.length}</div>
-              <div className="text-[10px] font-semibold text-muted uppercase tracking-wide">Salary Reports</div>
+              <div className="text-2xl font-black text-foreground tracking-tight leading-none mb-1">{verifiedRecords.length}</div>
+              <div className="text-[10px] font-bold text-muted uppercase tracking-wider">Salary Reports</div>
             </div>
           </div>
-          <div className="stat-card flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#e8f6f1] dark:bg-(--accent-faded) flex items-center justify-center shrink-0">
-              <DollarSign className="w-4 h-4 text-accent" />
+          <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-4 flex items-center gap-4 hover:border-accent/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5">
+            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+              <DollarSign className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <CurrencyDisplay value={medianComp} currency="USD" className="text-xl font-black text-accent" />
-              <div className="text-[10px] font-semibold text-muted uppercase tracking-wide">Median TC</div>
+              <CurrencyDisplay value={medianComp} currency="USD" className="text-2xl font-black text-accent tracking-tight leading-none mb-1" />
+              <div className="text-[10px] font-bold text-muted uppercase tracking-wider">Median TC</div>
             </div>
           </div>
         </div>
 
         {/* ── Tab Bar ── */}
-        <div className="flex items-center gap-1 mb-4 border-b border-border overflow-x-auto pb-px" style={{ scrollbarWidth: "none" }}>
+        <div className="flex items-center gap-1 mb-6 border-b border-border/70 overflow-x-auto pb-px" style={{ scrollbarWidth: "none" }}>
           {tabItems.map(({ id, label }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`px-4 py-2.5 text-sm font-bold whitespace-nowrap cursor-pointer transition-colors duration-150 border-b-2 -mb-px ${
+              className={`px-5 py-3 text-sm font-bold whitespace-nowrap cursor-pointer transition-all duration-200 border-b-2 -mb-px ${
                 activeTab === id
                   ? "text-primary border-primary"
-                  : "text-muted border-transparent hover:text-foreground hover:border-border"
+                  : "text-muted border-transparent hover:text-foreground hover:border-border/60"
               }`}
             >
               {label}
@@ -270,7 +270,7 @@ export default function DashboardClient({
           {currentUser && activeTab !== "submit" && (
             <button
               onClick={() => setActiveTab("submit")}
-              className="ml-auto flex items-center gap-1.5 text-xs font-bold text-white bg-primary hover:bg-(--primary-hover) px-3 py-1.5 rounded-lg cursor-pointer transition-colors shrink-0"
+              className="ml-auto flex items-center gap-1.5 text-xs font-bold text-white bg-primary hover:bg-primary-hover px-4 py-2 rounded-xl cursor-pointer shadow-md shadow-primary/15 transition-all duration-200 hover:-translate-y-0.5"
             >
               <Send className="w-3.5 h-3.5" />
               Add Salary
@@ -281,85 +281,116 @@ export default function DashboardClient({
         {/* ── Tab Content ── */}
         <div className="animate-fadeIn" key={activeTab}>
           {activeTab === "explore" && (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_310px] gap-8">
               {/* Left: Data Table */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-foreground">
+                  <span className="text-sm font-extrabold text-foreground/90">
                     {tableData.length === verifiedRecords.length
                       ? `${tableData.length} Verified Salary Reports`
                       : `${tableData.length} matching results (of ${verifiedRecords.length})`}
                   </span>
-                  <span className="text-xs text-muted hidden md:block">Click a row to expand details</span>
+                  <span className="text-xs text-muted/70 font-semibold hidden md:block">Click a row to expand details</span>
                 </div>
                 <CompensationTable datapoints={tableData} />
               </div>
 
               {/* Right: Sidebar widgets */}
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Top Paying Companies */}
-                <div className="levels-card p-4">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-3 flex items-center gap-2">
-                    <TrendingUp className="w-3.5 h-3.5 text-primary" />
+                <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-5 shadow-sm">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-primary" />
                     Top Paying Companies
                   </h3>
-                  <div className="space-y-2">
-                    {companyMedianPay.length > 0 ? companyMedianPay.map((item, idx) => (
-                      <div key={item.name} className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-(--card-hover) transition-colors cursor-pointer">
-                        <span className="text-[10px] font-black text-muted w-4 shrink-0">#{idx + 1}</span>
-                        <CompanyLogo name={item.name} size={28} className="shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-foreground truncate">{item.name}</p>
+                  <div className="space-y-3.5">
+                    {companyMedianPay.length > 0 ? companyMedianPay.map((item, idx) => {
+                      const percentage = highestPayingMedian > 0 ? (item.median / highestPayingMedian) * 100 : 0;
+                      return (
+                        <div key={item.name} className="group flex flex-col gap-1.5 p-2 rounded-xl hover:bg-card-hover/60 transition-colors cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-black text-muted w-4 shrink-0">#{idx + 1}</span>
+                            <div className="relative shrink-0 p-0.5 rounded-full bg-linear-to-tr from-primary/30 to-accent/30 group-hover:from-primary/60 group-hover:to-accent/60 transition-all">
+                              <CompanyLogo name={item.name} size={28} className="rounded-full bg-card shrink-0" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{item.name}</p>
+                            </div>
+                            <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-accent shrink-0" />
+                          </div>
+                          {/* Relative Pay Progress Bar */}
+                          <div className="w-full bg-border/40 rounded-full h-1.5 pl-7">
+                            <div className="w-full bg-border/40 rounded-full h-full overflow-hidden">
+                              <div 
+                                className="bg-linear-to-r from-primary to-accent h-full rounded-full transition-all duration-500" 
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-accent shrink-0" />
-                      </div>
-                    )) : (
+                      );
+                    }) : (
                       <p className="text-xs text-muted text-center py-4">No data available yet</p>
                     )}
                   </div>
                 </div>
 
                 {/* Top Paying Roles */}
-                <div className="levels-card p-4">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-3 flex items-center gap-2">
-                    <Briefcase className="w-3.5 h-3.5 text-primary" />
+                <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-5 shadow-sm">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-4 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-primary" />
                     Top Paying Roles
                   </h3>
-                  <div className="space-y-2">
-                    {roleMedianPay.length > 0 ? roleMedianPay.map((item, idx) => (
-                      <div key={item.name} className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-(--card-hover) transition-colors cursor-pointer">
-                        <span className="text-[10px] font-black text-muted w-4 shrink-0">#{idx + 1}</span>
-                        <div className="w-7 h-7 rounded-lg bg-(--primary-faded) flex items-center justify-center shrink-0">
-                          <Briefcase className="w-3.5 h-3.5 text-primary" />
+                  <div className="space-y-3.5">
+                    {roleMedianPay.length > 0 ? roleMedianPay.map((item, idx) => {
+                      const highestRoleMedian = roleMedianPay[0]?.median || 0;
+                      const percentage = highestRoleMedian > 0 ? (item.median / highestRoleMedian) * 100 : 0;
+                      return (
+                        <div key={item.name} className="group flex flex-col gap-1.5 p-2 rounded-xl hover:bg-card-hover/60 transition-colors cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-black text-muted w-4 shrink-0">#{idx + 1}</span>
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all">
+                              <Briefcase className="w-4 h-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{item.name}</p>
+                            </div>
+                            <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-accent shrink-0" />
+                          </div>
+                          {/* Relative Pay Progress Bar */}
+                          <div className="w-full bg-border/40 rounded-full h-1.5 pl-7">
+                            <div className="w-full bg-border/40 rounded-full h-full overflow-hidden">
+                              <div 
+                                className="bg-linear-to-r from-primary to-accent h-full rounded-full transition-all duration-500" 
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-foreground truncate">{item.name}</p>
-                        </div>
-                        <CurrencyDisplay value={item.median} currency="USD" className="text-xs font-black text-accent shrink-0" />
-                      </div>
-                    )) : (
+                      );
+                    }) : (
                       <p className="text-xs text-muted text-center py-4">No data available yet</p>
                     )}
                   </div>
                 </div>
 
                 {/* Level Grade Matrix */}
-                <div className="levels-card p-4">
+                <div className="bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-5 shadow-sm">
                   <h3 className="text-xs font-black uppercase tracking-wider text-foreground mb-1 flex items-center gap-2">
-                    <Landmark className="w-3.5 h-3.5 text-primary" />
+                    <Landmark className="w-4 h-4 text-primary" />
                     Grade Equivalency
                   </h3>
-                  <p className="text-[10px] text-muted mb-3">SE level cross-mapping across major tech companies</p>
+                  <p className="text-[10px] text-muted font-semibold mb-4">SE level cross-mapping across major tech companies</p>
                   <table className="w-full text-left text-[11px]">
                     <thead>
-                      <tr className="border-b border-border">
-                        <th className="pb-1.5 font-bold text-muted text-[10px] uppercase">Band</th>
-                        <th className="pb-1.5 font-bold text-muted text-[10px] uppercase">Google</th>
-                        <th className="pb-1.5 font-bold text-muted text-[10px] uppercase">Meta</th>
-                        <th className="pb-1.5 font-bold text-muted text-[10px] uppercase">MSFT</th>
+                      <tr className="border-b border-border/80">
+                        <th className="pb-2 font-bold text-muted text-[10px] uppercase tracking-wide">Band</th>
+                        <th className="pb-2 font-bold text-muted text-[10px] uppercase tracking-wide">Google</th>
+                        <th className="pb-2 font-bold text-muted text-[10px] uppercase tracking-wide">Meta</th>
+                        <th className="pb-2 font-bold text-muted text-[10px] uppercase tracking-wide">MSFT</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-(--border-light)">
+                    <tbody className="divide-y divide-border-light">
                       {[
                         { band: "Entry", g: "L3", m: "E3", ms: "59" },
                         { band: "Mid", g: "L4", m: "E4", ms: "61" },
@@ -367,11 +398,11 @@ export default function DashboardClient({
                         { band: "Staff", g: "L6", m: "E6", ms: "65" },
                         { band: "Principal", g: "L7", m: "E7", ms: "67" },
                       ].map((row) => (
-                        <tr key={row.band} className="hover:bg-(--card-hover)">
-                          <td className="py-2 text-muted font-semibold">{row.band}</td>
-                          <td className="py-2 text-primary font-bold">{row.g}</td>
-                          <td className="py-2 text-accent font-bold">{row.m}</td>
-                          <td className="py-2 text-amber-600 dark:text-amber-400 font-bold">{row.ms}</td>
+                        <tr key={row.band} className="hover:bg-card-hover/50 transition-colors">
+                          <td className="py-2.5 text-muted font-bold">{row.band}</td>
+                          <td className="py-2.5 text-primary font-bold">{row.g}</td>
+                          <td className="py-2.5 text-accent font-bold">{row.m}</td>
+                          <td className="py-2.5 text-amber-500 font-bold">{row.ms}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -380,12 +411,12 @@ export default function DashboardClient({
 
                 {/* Submit CTA */}
                 {!currentUser && (
-                  <div className="levels-card p-4 text-center" style={{ background: "linear-gradient(135deg, #f6f8fc 0%, #e8f0fc 100%)" }}>
-                    <h4 className="text-sm font-black text-foreground mb-1">Know your worth?</h4>
-                    <p className="text-xs text-muted mb-3">Share your salary anonymously and help the community.</p>
+                  <div className="bg-gradient-to-br from-primary/10 to-accent/5 backdrop-blur-md border border-primary/20 rounded-2xl p-6 text-center shadow-lg shadow-primary/5">
+                    <h4 className="text-sm font-black text-foreground mb-1.5">Know your worth?</h4>
+                    <p className="text-xs text-muted font-semibold mb-4 leading-relaxed">Share your salary anonymously and help the developer community make better career decisions.</p>
                     <button
                       onClick={() => setIsAuthOpen(true)}
-                      className="btn-primary text-xs py-2 px-4 w-full flex items-center justify-center gap-1.5"
+                      className="btn-primary text-xs py-2.5 px-4 w-full flex items-center justify-center gap-1.5 shadow-md shadow-primary/15 transition-all duration-200 hover:-translate-y-0.5"
                     >
                       <Send className="w-3.5 h-3.5" />
                       Add Your Salary
@@ -412,35 +443,35 @@ export default function DashboardClient({
 
           {activeTab === "submit" && (
             !currentUser ? (
-              <div className="max-w-lg mx-auto levels-card p-8 text-center animate-fadeIn">
-                <div className="w-14 h-14 bg-(--primary-faded) rounded-full flex items-center justify-center mx-auto mb-5">
-                  <Lock className="w-7 h-7 text-primary" />
+              <div className="max-w-lg mx-auto bg-card/45 backdrop-blur-md border border-border/80 rounded-2xl p-8 text-center animate-fadeIn shadow-lg">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+                  <Lock className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-lg font-black text-foreground mb-2">Sign in to Submit</h2>
-                <p className="text-sm text-muted max-w-sm mx-auto mb-5">
+                <p className="text-sm text-muted max-w-sm mx-auto mb-6 font-medium leading-relaxed">
                   Only verified registered users can submit salaries to maintain data quality. Your submissions are 100% anonymous.
                 </p>
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="btn-primary flex items-center justify-center gap-2 mx-auto px-6 py-2.5"
+                  className="btn-primary flex items-center justify-center gap-2 mx-auto px-6 py-3 shadow-md shadow-primary/15 transition-all duration-200 hover:-translate-y-0.5"
                 >
                   Sign In / Sign Up
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="max-w-lg mx-auto levels-card p-6 animate-fadeIn">
-                <div className="mb-5 pb-4 border-b border-border">
+              <div className="max-w-lg mx-auto bg-card/45 backdrop-blur-md border border-border/85 rounded-2xl p-6 animate-fadeIn shadow-lg">
+                <div className="mb-6 pb-4 border-b border-border/80">
                   <h2 className="text-base font-black text-foreground">Add Salary Data</h2>
-                  <p className="text-xs text-muted mt-0.5">Your submission is anonymized. Levels are auto-mapped for non-disclosed frameworks.</p>
+                  <p className="text-xs text-muted mt-1 font-medium">Your submission is anonymized. Levels are auto-mapped for non-disclosed frameworks.</p>
                 </div>
 
-                <form onSubmit={handleFormSubmit} className="space-y-4">
+                <form onSubmit={handleFormSubmit} className="space-y-5">
                   {formStatus && (
-                    <div className={`p-3 rounded-lg border flex items-start gap-2 text-xs font-semibold ${
+                    <div className={`p-4 rounded-xl border flex items-start gap-2.5 text-xs font-bold ${
                       formStatus.type === "success"
-                        ? "bg-(--success-faded) border-(--success)/20 text-(--success)"
-                        : "bg-(--danger-faded) border-(--danger)/20 text-(--danger)"
+                        ? "bg-accent/10 border-accent/20 text-accent"
+                        : "bg-red-500/10 border-red-500/20 text-red-500"
                     }`}>
                       {formStatus.type === "success"
                         ? <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
@@ -449,85 +480,87 @@ export default function DashboardClient({
                     </div>
                   )}
 
-                  {/* Field style shared */}
-                  {[
-                    { label: "Company", node: (
-                      <select className="form-select" value={subCompId} onChange={(e) => setSubCompId(e.target.value)}>
-                        {initialCompanies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                      </select>
-                    )},
-                    { label: "Role Type", node: (
-                      <select className="form-select" value={subRoleId} onChange={(e) => setSubRoleId(e.target.value)}>
-                        {initialRoles.map((r) => <option key={r.id} value={r.id}>{r.roleName}</option>)}
-                      </select>
-                    )},
-                    { label: "Location", node: (
-                      <select className="form-select" value={subLocId} onChange={(e) => setSubLocId(e.target.value)}>
-                        {initialLocations.map((loc) => <option key={loc.id} value={loc.id}>{loc.city}, {loc.country}</option>)}
-                      </select>
-                    )},
-                    { label: "Currency", node: (
-                      <select className="form-select" value={subCurrency} onChange={(e) => setSubCurrency(e.target.value)}>
-                        <option value="USD">USD — US Dollar</option>
-                        <option value="INR">INR — Indian Rupee</option>
-                        <option value="GBP">GBP — British Pound</option>
-                        <option value="EUR">EUR — Euro</option>
-                      </select>
-                    )},
-                  ].map(({ label, node }) => (
-                    <div key={label} className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-muted uppercase tracking-wider">{label}</label>
-                      {node}
-                    </div>
-                  ))}
+                  {/* Fields Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { label: "Company", node: (
+                        <select className="form-select w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all cursor-pointer" value={subCompId} onChange={(e) => setSubCompId(e.target.value)}>
+                          {initialCompanies.map((c) => <option key={c.id} value={c.id} className="bg-card text-foreground">{c.name}</option>)}
+                        </select>
+                      )},
+                      { label: "Role Type", node: (
+                        <select className="form-select w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all cursor-pointer" value={subRoleId} onChange={(e) => setSubRoleId(e.target.value)}>
+                          {initialRoles.map((r) => <option key={r.id} value={r.id} className="bg-card text-foreground">{r.roleName}</option>)}
+                        </select>
+                      )},
+                      { label: "Location", node: (
+                        <select className="form-select w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all cursor-pointer" value={subLocId} onChange={(e) => setSubLocId(e.target.value)}>
+                          {initialLocations.map((loc) => <option key={loc.id} value={loc.id} className="bg-card text-foreground">{loc.city}, {loc.country}</option>)}
+                        </select>
+                      )},
+                      { label: "Currency", node: (
+                        <select className="form-select w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all cursor-pointer" value={subCurrency} onChange={(e) => setSubCurrency(e.target.value)}>
+                          <option value="USD" className="bg-card text-foreground">USD — US Dollar</option>
+                          <option value="INR" className="bg-card text-foreground">INR — Indian Rupee</option>
+                          <option value="GBP" className="bg-card text-foreground">GBP — British Pound</option>
+                          <option value="EUR" className="bg-card text-foreground">EUR — Euro</option>
+                        </select>
+                      )},
+                    ].map(({ label, node }) => (
+                      <div key={label} className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">{label}</label>
+                        {node}
+                      </div>
+                    ))}
+                  </div>
 
                   {/* Level / Designation */}
                   {isDisclosed ? (
-                    <div className="flex flex-col gap-1 animate-fadeIn">
-                      <label className="text-[10px] font-bold text-muted uppercase tracking-wider">Internal Level</label>
-                      <select className="form-select" value={subLevelId} onChange={(e) => setSubLevelId(e.target.value)}>
+                    <div className="flex flex-col gap-1.5 animate-fadeIn">
+                      <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">Internal Level</label>
+                      <select className="form-select w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all cursor-pointer" value={subLevelId} onChange={(e) => setSubLevelId(e.target.value)}>
                         {disclosedLevels.map((l: { id: string; levelCode: string; equivalentLevel: string }) => (
-                          <option key={l.id} value={l.id}>{l.levelCode} ({l.equivalentLevel})</option>
+                          <option key={l.id} value={l.id} className="bg-card text-foreground">{l.levelCode} ({l.equivalentLevel})</option>
                         ))}
                       </select>
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-1 animate-fadeIn">
-                      <label className="text-[10px] font-bold text-muted uppercase tracking-wider">Job Title / Designation</label>
+                    <div className="flex flex-col gap-1.5 animate-fadeIn">
+                      <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">Job Title / Designation</label>
                       <input
                         type="text"
                         required
-                        className="form-input"
+                        className="form-input w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3.5 py-2 text-sm font-semibold outline-none focus:border-primary transition-all"
                         placeholder="e.g. Senior Software Engineer, Technology Lead"
                         value={subDesignation}
                         onChange={(e) => setSubDesignation(e.target.value)}
                       />
-                      <span className="text-[10px] text-amber-600 font-semibold">Auto-estimated grade mapping will be applied.</span>
+                      <span className="text-[10px] text-amber-500 font-bold pl-1 mt-0.5">Auto-estimated grade mapping will be applied.</span>
                     </div>
                   )}
 
                   {/* YOE + Base */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-muted uppercase tracking-wider">Years Exp.</label>
-                      <input type="number" min="0" required className="form-input" value={subYoe} onChange={(e) => setSubYoe(e.target.value)} />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">Years Exp.</label>
+                      <input type="number" min="0" required className="form-input w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3.5 py-2 text-sm font-semibold outline-none focus:border-primary transition-all" value={subYoe} onChange={(e) => setSubYoe(e.target.value)} />
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-muted uppercase tracking-wider">Base Salary / yr</label>
-                      <input type="number" min="1" required className="form-input" value={subBase} onChange={(e) => setSubBase(e.target.value)} />
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">Base Salary / yr</label>
+                      <input type="number" min="1" required className="form-input w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3.5 py-2 text-sm font-semibold outline-none focus:border-primary transition-all" value={subBase} onChange={(e) => setSubBase(e.target.value)} />
                     </div>
                   </div>
 
                   {/* Stock + Bonus + Joining */}
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {[
                       { label: "Stock (4yr)", val: subStock, set: setSubStock, ph: "Total grant" },
                       { label: "Annual Bonus", val: subBonus, set: setSubBonus, ph: "Per year" },
                       { label: "Sign-on", val: subJoining, set: setSubJoining, ph: "One-time" },
                     ].map(({ label, val, set, ph }) => (
-                      <div key={label} className="flex flex-col gap-1">
-                        <label className="text-[10px] font-bold text-muted uppercase tracking-wider">{label}</label>
-                        <input type="number" min="0" className="form-input" placeholder={ph} value={val} onChange={(e) => set(e.target.value)} />
+                      <div key={label} className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-black text-muted uppercase tracking-wider pl-1">{label}</label>
+                        <input type="number" min="0" className="form-input w-full bg-card/60 dark:bg-card/40 border border-border rounded-xl px-3 py-2 text-sm font-semibold outline-none focus:border-primary transition-all" placeholder={ph} value={val} onChange={(e) => set(e.target.value)} />
                       </div>
                     ))}
                   </div>
@@ -535,7 +568,7 @@ export default function DashboardClient({
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-sm disabled:opacity-50 cursor-pointer mt-2"
+                    className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm disabled:opacity-50 cursor-pointer mt-4 shadow-md shadow-primary/15 transition-all duration-200 hover:-translate-y-0.5"
                   >
                     <Send className="w-4 h-4" />
                     {isPending ? "Submitting..." : "Submit Anonymously"}
