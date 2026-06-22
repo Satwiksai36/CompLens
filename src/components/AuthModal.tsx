@@ -79,7 +79,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
       <div className="relative w-full max-w-[420px] bg-white dark:bg-[#121214] rounded-2xl shadow-2xl animate-fadeIn z-10 border border-slate-200 dark:border-[#222226] overflow-hidden">
         
         {/* Top accent bar */}
-        <div className="h-1 w-full bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-500" />
+        <div className="h-1 w-full bg-gradient-to-r from-primary via-purple-500 to-cyan-500" />
 
         <div className="p-7">
           {/* Close Button */}
@@ -95,18 +95,18 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           <div className="text-center mb-7">
             {/* Branding — matches Header logo */}
           <div className="flex items-center justify-center gap-2.5">
-            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br from-indigo-600 to-indigo-500 shadow-md shadow-indigo-500/25 shrink-0">
+            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-[#0060b9] to-[#19a672] shadow-md shadow-primary/20 shrink-0">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
                 <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
                 <rect x="11" y="4" width="3" height="13" rx="1" fill="white"/>
                 <path d="M2.5 10.5L7.5 6.5L12.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6"/>
-                <circle cx="14.5" cy="3" r="1.5" fill="#a5b4fc"/>
+                <circle cx="14.5" cy="3" r="1.5" fill="#a5f3c4"/>
               </svg>
             </div>
             <div className="flex items-baseline gap-0">
               <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white leading-none">Comp</span>
-              <span className="text-xl font-black tracking-tight text-indigo-600 dark:text-indigo-400 leading-none">Lens</span>
+              <span className="text-xl font-black tracking-tight text-primary leading-none">Lens</span>
             </div>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
@@ -168,7 +168,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                     placeholder="e.g. Jane Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-4 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-4 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-4 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 transition-all"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-4 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-10 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 transition-all"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-xl py-2.5 pl-10 pr-10 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
                 <button
                   type="button"
@@ -232,7 +232,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 text-sm"
+              className="w-full mt-2 bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/20 hover:shadow-primary/30 text-sm"
             >
               {loading ? (
                 <>
@@ -254,7 +254,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   <button
                     type="button"
                     onClick={() => handleTabChange("signup")}
-                    className="text-indigo-600 hover:text-indigo-700 font-semibold cursor-pointer transition-colors"
+                    className="text-primary hover:text-primary-hover font-semibold cursor-pointer transition-colors"
                   >
                     Sign Up
                   </button>
@@ -265,7 +265,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   <button
                     type="button"
                     onClick={() => handleTabChange("signin")}
-                    className="text-indigo-600 hover:text-indigo-700 font-semibold cursor-pointer transition-colors"
+                    className="text-primary hover:text-primary-hover font-semibold cursor-pointer transition-colors"
                   >
                     Sign In
                   </button>

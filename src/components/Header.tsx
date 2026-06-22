@@ -85,12 +85,12 @@ export default function Header() {
   return (
     <>
       {/* ── Primary Nav Bar ── */}
-      <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-white dark:bg-[var(--card)] transition-colors duration-200 shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+      <header className="sticky top-0 z-40 w-full border-b border-border bg-white dark:bg-card transition-colors duration-200 shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
         <div className="mx-auto flex h-[52px] max-w-[1200px] items-center px-4 sm:px-6" style={{ gap: "1rem" }}>
 
           {/* Brand Logo — levels.fyi style */}
           <Link href="/" className="flex items-center gap-2 select-none shrink-0 group" style={{ minWidth: "120px" }}>
-            <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-[#0060b9] to-[#19a672] shadow-sm group-hover:shadow-md transition-shadow duration-200 shrink-0">
+            <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-linear-to-br from-[#0060b9] to-[#19a672] shadow-sm group-hover:shadow-md transition-shadow duration-200 shrink-0">
               <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1" y="11" width="3" height="6" rx="1" fill="white" fillOpacity="0.7"/>
                 <rect x="6" y="7" width="3" height="10" rx="1" fill="white" fillOpacity="0.85"/>
@@ -100,18 +100,18 @@ export default function Header() {
               </svg>
             </div>
             <div className="flex items-baseline">
-              <span className="text-lg font-black tracking-tight text-[var(--foreground)] leading-none">Comp</span>
-              <span className="text-lg font-black tracking-tight text-[var(--primary)] leading-none">Lens</span>
+              <span className="text-lg font-black tracking-tight text-foreground leading-none">Comp</span>
+              <span className="text-lg font-black tracking-tight text-primary leading-none">Lens</span>
             </div>
           </Link>
 
           {/* Search bar — omnisearch style */}
           <div className="flex-1 hidden md:flex items-center mx-4 max-w-xs relative">
-            <Search className="absolute left-3 w-3.5 h-3.5 text-[var(--muted)] pointer-events-none" />
+            <Search className="absolute left-3 w-3.5 h-3.5 text-muted pointer-events-none" />
             <input
               type="text"
               placeholder="Search companies, roles..."
-              className="w-full h-9 pl-8 pr-3 text-sm bg-[#f0f0f1] dark:bg-[#1a1a1e] border-0 rounded-lg text-[var(--foreground)] placeholder-[var(--muted)] outline-none focus:bg-white dark:focus:bg-[var(--card)] focus:ring-2 focus:ring-[var(--primary)]/20 transition-all duration-200"
+              className="w-full h-9 pl-8 pr-3 text-sm bg-[#f0f0f1] dark:bg-[#1a1a1e] border-0 rounded-lg text-foreground placeholder-muted outline-none focus:bg-white dark:focus:bg-card focus:ring-2 focus:ring-primary/20 transition-all duration-200"
               style={{ fontFamily: "var(--font-sans)" }}
             />
           </div>
@@ -124,7 +124,7 @@ export default function Header() {
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[#f0f0f1] dark:hover:bg-[#1a1a1e] cursor-pointer transition-colors duration-150"
+              className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-[#f0f0f1] dark:hover:bg-[#1a1a1e] cursor-pointer transition-colors duration-150"
               aria-label="Toggle theme"
             >
               {darkMode
@@ -137,31 +137,31 @@ export default function Header() {
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center gap-1.5 pl-2 pr-2 py-1.5 rounded-full border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[#f6f8fc] dark:hover:bg-[var(--card-hover)] cursor-pointer transition-all duration-150"
+                  className="flex items-center gap-1.5 pl-2 pr-2 py-1.5 rounded-full border border-border hover:border-primary/30 hover:bg-[#f6f8fc] dark:hover:bg-(--card-hover) cursor-pointer transition-all duration-150"
                 >
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-r from-[#0060b9] to-[#19a672] text-white text-[10px] font-black">
+                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-linear-to-r from-[#0060b9] to-[#19a672] text-white text-[10px] font-black">
                     {getInitials()}
                   </div>
-                  <ChevronDown className="w-3 h-3 text-[var(--muted)]" />
+                  <ChevronDown className="w-3 h-3 text-muted" />
                 </button>
 
                 {showDropdown && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
-                    <div className="absolute right-0 mt-2 w-52 glass-card rounded-xl p-2 shadow-xl z-50 animate-fadeIn border border-[var(--border)]">
-                      <div className="px-3 py-2 border-b border-[var(--border)]/60 mb-1">
-                        <p className="text-[10px] text-[var(--muted)] font-semibold uppercase tracking-wider">Signed in as</p>
-                        <p className="text-xs font-bold text-[var(--foreground)] truncate mt-0.5">{user.name || user.email}</p>
-                        <p className="text-[10px] text-[var(--muted)] truncate">{user.email}</p>
+                    <div className="absolute right-0 mt-2 w-52 glass-card rounded-xl p-2 shadow-xl z-50 animate-fadeIn border border-border">
+                      <div className="px-3 py-2 border-b border-border/60 mb-1">
+                        <p className="text-[10px] text-muted font-semibold uppercase tracking-wider">Signed in as</p>
+                        <p className="text-xs font-bold text-foreground truncate mt-0.5">{user.name || user.email}</p>
+                        <p className="text-[10px] text-muted truncate">{user.email}</p>
                       </div>
                       <div className="space-y-0.5">
                         {user.role === "ADMIN" && (
                           <Link
                             href="/admin"
                             onClick={() => setShowDropdown(false)}
-                            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] rounded-lg hover:bg-[var(--card-hover)] transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted hover:text-foreground rounded-lg hover:bg-(--card-hover) transition-colors"
                           >
-                            <Database className="w-3.5 h-3.5 text-[var(--primary)]" />
+                            <Database className="w-3.5 h-3.5 text-primary" />
                             Admin Console
                           </Link>
                         )}
@@ -181,7 +181,7 @@ export default function Header() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="text-xs font-bold text-[var(--foreground)] hover:text-[var(--primary)] px-3 py-2 rounded-lg hover:bg-[#f0f0f1] dark:hover:bg-[#1a1a1e] transition-colors cursor-pointer"
+                  className="text-xs font-bold text-foreground hover:text-primary px-3 py-2 rounded-lg hover:bg-[#f0f0f1] dark:hover:bg-[#1a1a1e] transition-colors cursor-pointer"
                 >
                   Log in
                 </button>

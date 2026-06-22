@@ -26,7 +26,7 @@ export interface DashboardChartsProps {
   locationData: Array<{ name: string; adjustedScore: number }>;
 }
 
-const COLORS = ["#4f46e5", "#06b6d4", "#f59e0b", "#10b981", "#ec4899", "#8b5cf6", "#6366f1"];
+const COLORS = ["#0060b9", "#06b6d4", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#3b82f6"];
 
 export const DashboardCharts: React.FC<DashboardChartsProps> = ({
   companyData,
@@ -182,7 +182,7 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
                   stroke="var(--color-muted)"
                 />
                 <Tooltip
-                  formatter={(val: any) => [`₹${Math.round(Number(val || 0) / 1000)}k`, "Purchasing Power Index"]}
+                  formatter={(val: any) => [formatCurrency(Number(val || 0)), "Purchasing Power Index"]}
                   contentStyle={{ backgroundColor: "var(--card)", borderColor: "var(--border)" }}
                   labelStyle={{ color: "var(--foreground)", fontWeight: 700 }}
                 />
@@ -190,7 +190,7 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
                   type="monotone"
                   dataKey="adjustedScore"
                   stroke="var(--color-primary)"
-                  fill="rgba(79, 70, 229, 0.2)"
+                  fill="rgba(0, 96, 185, 0.2)"
                   strokeWidth={2.5}
                 />
               </AreaChart>

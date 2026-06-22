@@ -14,7 +14,7 @@ export interface CompanyProfileClientProps {
   records: Array<any>;
 }
 
-const COLORS = ["#4f46e5", "#06b6d4", "#f59e0b", "#10b981", "#ec4899", "#8b5cf6"];
+const COLORS = ["#0060b9", "#06b6d4", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
 
 const COMPANY_REVIEWS: Record<string, {
   rating: number;
